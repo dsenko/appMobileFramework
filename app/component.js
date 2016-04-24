@@ -13,6 +13,12 @@ app.component = {
         obj.fullName = name;
         obj.ready = false;
 
+        obj.data = {};
+
+        obj.clean = function(){
+            app.component[name].data = {};
+        }
+
         app.component[name] = obj;
 
         var tempTemplateId = '#temp-template-' + app.util.System.hash();
