@@ -50,7 +50,14 @@ app.crud = {
             console.error(err);
         }, function () {
             if(successCallback !== undefined){
-                successCallback(array, lastId);
+
+                if(sql.toLowerCase().indexOf('insert') != -1){
+                    successCallback(lastId);
+                }else{
+                    successCallback(array);
+                }
+
+
             }
         });
 

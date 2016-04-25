@@ -29,8 +29,11 @@ app.cordova = {
 
 
     onBack : function(e){
-        e.preventDefault();
-
+        
+        if(e){
+            e.preventDefault();
+        }
+        
         console.log('x');
         if(app.mCtx !== null && app.mCtx.onBack !== undefined){
             app.mCtx.onBack();
