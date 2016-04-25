@@ -13,19 +13,38 @@ app.query = {
         var obj = {
 
             sql: sql,
-            bind: function(valueList){
+            bind: function(valueListOrObj){
 
                 var sql = this.sql;
 
-                for (var i = 0; i < valueList.length; i++) {
+                if(valueListOrObj instanceof Array) {
 
-                    if(typeof valueList[i] == 'string'){
-                        sql = sql.replace('?', "'"+valueList[i]+"'");
-                    }else{
-                        sql = sql.replace('?', valueList[i]);
+                    for (var i = 0; i < valueListOrObj.length; i++) {
+
+                        if (typeof valueListOrObj[i] == 'string') {
+                            sql = sql.replace('?', "'" + valueListOrObj[i] + "'");
+                        } else {
+                            sql = sql.replace('?', valueListOrObj[i]);
+                        }
+
+                    }
+
+                }else{
+
+                    for(var fieldName in valueListOrObj){
+
+                        var fieldValue = valueListOrObj[fieldName];
+
+                        if (typeof fieldValue == 'string') {
+                            sql = sql.replace(':'+fieldName, "'" + valueListOrObj[i] + "'");
+                        } else {
+                            sql = sql.replace(':'+fieldName, fieldValue);
+                        }
+
                     }
 
                 }
+
 
                 return sql;
 

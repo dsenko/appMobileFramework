@@ -1,0 +1,1014 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="../www/css/bootstrap.min.css">
+
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+    <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+    <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushPlain.js"></script>
+    <link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+
+</head>
+<body>
+
+<div class="container">
+    <h3>Dokumentacja MobileApp Framework</h3>
+
+    <div class="row">
+        <div class="col-sm-3 border-right">
+            <ol >
+                <li><a class="bold" href="#introduction">Wstęp</a></li>
+                <li><a class="bold" href="#architecture">Architektura</a></li>
+                <li><a class="bold" href="#structure">Struktura projektu</a></li>
+                <li class="bold">Elementy</li>
+                <ol>
+
+                    <li><a class="bold" href="#system">System</a></li>
+                    <li><a class="bold" href="#config">Config</a></li>
+                    <li><a class="bold" href="#events">Events</a></li>
+                    <li><a class="bold" href="#plugins">Plugins</a></li>
+                    <li><a class="bold" href="#global">Global</a></li>
+
+                    <li><a class="bold" href="#controller">Controller</a></li>
+                    <li><a class="bold" href="#component">Component</a></li>
+                    <li><a class="bold" href="#modal">Modal</a></li>
+                    <li><a class="bold" href="#renderer">Renderer</a></li>
+
+
+                    <li><a class="bold" href="#query">Query</a></li>
+                    <li><a class="bold" href="#crud">CRUD</a></li>
+                    <li><a class="bold" href="#model">Model</a></li>
+
+                    <li><a class="bold" href="#enumerator">Enumerator</a></li>
+                    <li><a class="bold" href="#service">Service</a></li>
+                    <li><a class="bold" href="#util">Util</a></li>
+
+
+                    <li><a class="bold" href="#message">Message</a></li>
+                    <li><a class="bold" href="#mock">Mock</a></li>
+                    <li><a class="bold" href="#rest">Rest</a></li>
+
+                </ol>
+            </ol>
+        </div>
+        <div class="col-sm-9 padding-left">
+
+            <div class="row" id="introduction">
+                <h3>Wstęp</h3>
+                <p>
+                    AppMobile Framework jest sandboxowyą niezależną biblioteką do tworzenia aplikacji mobilnych pod Cordova zbudowaną w oparciu o jQuery.
+                    Framework udostępnia podstawową architekturę View-Controller, nastomiast Model jest opcjonalny. Dodatkowo umożliwia tworzenie komponentów wspólnych,
+                    udostępnia CRUD do bazy lokalnej SQLLite, tworzenie enumeratorów, okien modalnych, zmiennych globalnych, mocków restów, restów, modelu bazy danych, wrapowania pluginów,
+                    pisania zapytań SQL, rejstrowania serwisów oraz utilów. Dodatkowo wspiera wielojęzyczność.
+                    Założeniem projektu było proste i szybkie budowanie aplikacji mobilnych w oparciu o JavaScript, framework miał udstpępnić proste funkcjonalności tworzące warstwę abstrakcyjną
+                    dla developera z jednoczesnym zachowaniem dużej swobody i prostej konfiguracji podstawowych funkcji.
+
+                    AppMobile Framework jest przeciwieństwem frameworków takich jak Ionic, które wymagają dużej znajomości api oraz narzucają rozwiązania
+                    frontendowe.
+                </p>
+            </div>
+
+            <hr/>
+
+            <div class="row" id="architecture">
+                <h3>Architektura</h3>
+                <p>
+                    Architektura frameworku oparata jest o wzorzec View-Controller. Wszystkie obiekty są statyczne, stąd panuje duża swoboda w używaniu obiektów
+                    budowanych przez developera w oparciu o framework w praktycznie dowolnym miejscu poprzez statyczne odniesienie. Tym samym, framework nie potrzebuje
+                    systemu wstrzykiwania zależności, czym jest łatwiejszy w użyciu oraz przyjemniejszy dla programisty ze względu na podpowiedzi w IDE.
+                </p>
+                <h5>View-Controller</h5>
+                <p>
+                    <p><img src="view-controller.png"/></p>
+                    Powyższy schemat prezentuje architekturę View-Controller, uzupełnioną o możliwość dodawania komponentów do kontrolera, bądź okien modalnych.
+                </p>
+                <p>
+                    <p><img src="cordova.png" /></p>
+                    Powyższy schemat prezentuje architekturę dla integracji z Cordova. Programista może wrappować pluginy Cordova oraz nadpisywać podstawowe eventy
+                    aplikacji mobilnej, które są później nadpisywane i procesowane przez Cordovę i framework.
+                </p>
+                <p>
+                    <p><img src="others.png" /></p>
+                    Powyższy schemat prezentuje architekturę dla pozostałych statycznych elementów frameworku oraz integracji z lokalną bazą danych SQLLite.
+                    Komponenty typu Util, Service, Model, Query, Rest, Enumerator mogą być statycznie używane między sobą.
+                    Dodatkowo element Database odpowiedzialny za obsługę bazy danych, może wykorzystać Model do budowania bazy danych.
+                </p>
+            </div>
+
+            <hr/>
+
+            <div class="row" id="structure">
+                <h3>Struktura projektu</h3>
+                <p>
+                    AppMobile Framework narzuca ogólną architekturę aplikacji opartą o sprawdzone wzorce.
+                    <br/>Narzucona struktura plików dotyczy się trzech głównych komponentów: <code>app.component</code><code>app.controller</code><code>app.modal</code>
+                    <br/>Aczkolwiek w prezentowanym przykładzie oraz zasadach struktury wszystko jest uporządkowane zgodnie z naszym poczuciem porządku jaki wyznaczamy tym frameworkiem.
+                </p>
+                <p>
+                    Założenia dla struktury projektu Cordova
+                    <ol>
+                        <li>Katalog Cordovy <code>www</code> jest katalogiem docelowym dla wszystkich postkompilatów, bibliotek, plików sql, czcionek, zminimalizowanych wersji js</li>
+                        <li>Katalog developerski to <code>develop</code> w głównym folderze projektu</li>
+                        <li>Skrypty aplikacji znajdują się w katalogu <code>develop/app</code></li>
+                        <li>Pliki css,scss,sass,less znajdują się w osobnych katalogach <code>develop/css</code>, <code>develop/less</code>, <code>develop/sass</code></li>
+                        <li>Czcionki dodatkowe znajdują się w <code>develop/fonts</code> i są przenoszone do <code>www/fonts</code></li>
+                        <li>Obrazy znajdują się w <code>develop/img</code> i są przenoszone do <code>www/img</code></li>
+                        <li>Skrypty SQL znajdują się w <code>develop/sql</code> i są przenoszone do <code>www/sql</code></li>
+                        <li><code>index.html</code> znajduje się w <code>develop</code> i jest przenoszony do <code>www</code></li>
+                        <li>Katalog <code>www</code> jest czyszczony podczas budowania projektu</li>
+                    </ol>
+                </p>
+                <p>
+                    Założenia dla struktury projektu AppMobile (odnosimy się do <code>develop/app</code>)
+                    <ol>
+                        <li>Kontrolery umieszczone są OBOWIĄZKOWO w katalogu <code>controller</code> jako katalogi o nazwie kontrolera oraz para plików: <code>nazwaKontrolera.controller.js</code> oraz <code>nazwaKontrolera.view.html</code></li>
+                        <li>Komponenty umieszczone są OBOWIĄZKOWO w katalogu <code>component</code> jako katalogi o nazwie komponentu oraz para plików: <code>nazwaKomponentu.component.js</code> oraz <code>nazwaKomponentu.view.html</code></li>
+                        <li>Modale umieszczone są OBOWIĄZKOWO w katalogu <code>modal</code> jako katalogi o nazwie modala oraz para plików: <code>nazwaModala.modal.js</code> oraz <code>nazwaModala.view.html</code></li>
+                        <li>Pozostała struktura jest dowolna aczkolwiek zalecane zasady:
+                            <ul>
+                                <li>Pliki js nazywamy zgodnie z konwencją <code>nazwaPliku.typPliku.js</code> dla przykładu serwis o nazwie Authorization będzie w pliku o nazwie <code>authorization.service.js</code></li>
+                                <li>Pliki js w miarę możliwości umieszczamy w folderach które nazywają się tak jak drugi człon nazwy pliki. Na przykład <code>productGroup.enumerator.js</code> umieścimy w katalogu <code>enumerator</code></li>
+                                <li>Poszczególne serwisy, utile, renderery, modele, rozszerzenia, enumeratory umieszczamy w pojedynczych plikach starając się atomizować projekt</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </p>
+                <p>
+                    Przykładowe drzewo projektu:
+                </p>
+                <p>
+                    <img src="struktura.png" />
+                </p>
+            </div>
+
+            <hr/>
+
+            <div class="row" id="system">
+                <h3>System</h3>
+                <p>
+                    Framework posiada główną klasę systemową oferującą podstawowe metody oraz właściwości frameworka
+                </p>
+                <p>
+                    <br/><code>app.ctx</code> zawiera obiekt aktualnie wyrenderowanego kontrolera
+                    <br/><code>app.mCtx</code> zawiera obiekt aktualnie wyrenderowanego okna modalnego
+                    <br/><code>app.online</code> wartość boolean oznaczająca połączenie z siecią
+                </p>
+                <p>
+                    <br/><code>app.system.renderModal(modal, data)</code> renderuje okno modalne, przyjmuje na wejściu okno modalne oraz dane wejściowe metody <code>init</code>
+                    <pre class="brush: js;">
+                        app.system.renderModal(app.modal.ExitApp); //metoda może przyjmować tylko jeden parametr jakim jest okno modalne
+                        app.system.renderModal(app.modal.ExitApp, {
+                            message: "Are you sure?"
+                        });
+                    </pre>
+                </p>
+                <p>
+                    <code>app.system.render(controller, data, callback)</code> renderuje kontroler, przyjmuje na wejściu kontroler oraz dane wejściowe metody <code>init</code>, może również przyjmować callback wykonywany po całkowitym zakończeniu renderowania (w tym metody <code>init</code>)
+                    <pre class="brush: js;">
+                        app.system.render(app.controller.Login); //metoda może przyjmować tylko jeden parametr jakim jest kontroler
+                        app.system.render(app.controller.Login, {
+                            username: "test@test.pl"
+                        });
+                        app.system.render(app.controller.Login, null, function(){
+                            //wykonywane po zakończeniu renderowania oraz wykonaniu metody init()
+                        });
+                    </pre>
+                </p>
+                <p>
+                    <code>app.system.exit()</code> metoda wykonuje akcję <code>navigator.app.exitApp()</code> powodującą wyłączenie aplikacji
+                </p>
+                <p>
+                    <code>app.system.init(callBack)</code> funkcja startuje całą aplikację, dodatkowo przyjmuje callback wykonywany po wyrenderowaniu pierwszego kontrolera zdefiniowanego jako
+                    <code>app.config.mainController</code>
+                </p>
+            </div>
+
+            <hr/>
+
+            <div class="row" id="config">
+                <h3>Config</h3>
+                <p>
+                    AppMobile Framework posiada bardzo prostą konfigurację składającą się z kilku zmiennych.
+                    <br/>Aby nadpisać domyślną konfigurację, używamy metody <code>app.config.extend</code>
+                </p>
+                <pre class="brush: js;">
+                    app.config.extend({
+
+                        mobileRun: false, //określa, czy aplikacja działa w trybie natywnym czy przeglądarkowym
+
+                        mockApi: true,  //określa, czy aplikacja ma korzystać z mocków RESTowych
+
+                        mainController: "Welcome",  //określa nazwę kontrolera renderowanego po uruchomieniu aplikacji
+                        viewsPath: './view', //określa główną ścieżkę do struktury katalogów widoków
+
+                        lang: "pl",  //określa domyślny język aplikacji
+
+                        dbMode: 'create-drop',  //określa tryb tworzenia bazy danych
+                        dbTestMode: true, //określa czy baza danych jest w trybie testowym
+
+                        dbCreateDropFromScript: false,  //określa czy baza danych jest tworzona poprzez skrypty SQL
+
+                        dbCreateScript: './sql/create.sql',  //określa ścieżkę do pliku tworzącego bazę danych
+                        dbDropScript: './sql/drop.sql',  //określa ścieżkę do pliku usuwającego bazę danych
+                        dbTestScript: './sql/test.sql',  //określa ścieżkę do pliku tworzącego testowe dane
+                        dbProductionScript: './sql/production.sql',  //określa ścieżkę do pliku tworzącego dane produkcyjne
+
+                    });
+                </pre>
+                <p>
+                    Oczywiście programista może do obiektu rozszerzającego dodać własne zmienne.
+                </p>
+            </div>
+
+            <hr/>
+
+            <div class="row" id="events">
+                <h3>Eventy natywne</h3>
+                <p>
+                    AppMobile Framework udostępnia w wygodny sposób możliwość nadpisania eventów natywnych poprzez Cordova.
+                    Eventy dodatkowo są rozszerzone poprzed plugin Network do sprawdzania statusu ONLINE/OFFLINe.
+                    <br/>Przykładowe nadpisanie eventu offline :
+
+                </p>
+                <pre class="brush: js;">
+                    app.events.extend("offline", function () {
+                        //wywołany w momencie gdy aplikacja jest w trybie offline
+                    });
+                </pre>
+                <p>
+                    Udostępnione są następujące eventy:
+                    <br/><code>onOffline</code> lub <code>offline</code> wywoływane przy renderowaniu kontrolera/okna modalnego w przypadku kiedy nie ma połączenia z siecią
+                    <br/><code>onOnline</code> lub <code>online</code> wywoływane przy renderowaniu kontrolera/okna modalnego w przypadku kiedy jest połączenie z siecią
+                    <br/><code>onBack</code> lub <code>back</code> wywoływane po renderowaniu kontrolera/okna modalnego w przypadku kiedy wykonana jest akcja powrotu
+                    <br/><code>domEvents</code> lub <code>dom</code> wywoływane przy starcie aplikacji, umożliwia dodanie eventów do DOM
+                </p>
+
+            </div>
+
+            <hr/>
+
+
+            <div class="row" id="plugins">
+                <h3>Pluginy Cordova</h3>
+                <p>
+                    Framework nie ingeruje w instalację i zarządzenie pluginami. Umożliwia jedynie usystematyzowanie ich we wspólne api.
+                    <br/>Dodatkowo umożliwia to testowanie aplikacji w pełni w postaci przeglądarkowej, ze względu na wrappowanie pluginów.
+                </p>
+                <p>
+                    Rejestrowanie wrapperów pluginów odbywa się dwojako:
+                    <br/><code>app.plugins.wrapList(pluginsList)</code> przyjmujący na wejściu listę pluginów
+                    <br/><code>app.plugins.wrap(pluginName, wrapperBody)</code> przyjmujący na wejściu nazwę pluginu oraz obiekt wrappera
+                </p>
+                <p>
+                    Zakładamy, że nasza aplikacja ma zainstalowany <code>cordova-plugin-barcodescanner</code> i chcielibyśmy, aby testować jego działanie także podczas testów przeglądarkowych.
+                    <br/>Przykładowe implementacje w ramach rejestrowania listy oraz pojedynczo:
+                </p>
+                <pre class="brush: js;">
+                    app.plugins.wrap("scanner", {
+
+                        scan: function (successCallback, errorCallback) {
+
+                            if (app.config.mobileRun) {
+                                //przypadek kiedy aplikacja działa na telefonie
+                                cordova.plugins.barcodeScanner.scan(
+                                function (result) {
+                                    successCallback(result.text, result.format, result.cancelled);
+                                }, function (error) {
+                                    errorCallback(error);
+                                });
+                            } else {
+                                // przypadek kiedy testujemy w przeglądarce
+                                successCallback('5755338016197', 'EAN-13', false);
+                            }
+                        }
+
+                    });
+
+                </pre>
+                <p>
+                    lub
+                </p>
+                 <pre class="brush: js;">
+                    app.plugins.wrapList({
+
+                         scanner: {
+
+                             scan: function (successCallback, errorCallback) {
+
+                                    if (app.config.mobileRun) {
+                                        //przypadek kiedy aplikacja działa na telefonie
+                                        cordova.plugins.barcodeScanner.scan(
+                                        function (result) {
+                                            successCallback(result.text, result.format, result.cancelled);
+                                        }, function (error) {
+                                            errorCallback(error);
+                                        });
+                                    } else {
+                                        // przypadek kiedy testujemy w przeglądarce
+                                        successCallback('5755338016197', 'EAN-13', false);
+                                    }
+                                }
+
+                             }
+                         }
+
+                    });
+
+                </pre>
+                <p>
+                    Aby wywołać plugin, odnosimy się do obiektu wrappującego i tym samym możemy testować aplikację wraz z pluginami w przeglądarce.
+                </p>
+                <pre class="brush: js;">
+
+                    app.plugins.wrapper.scanner.scan(function(code, format, cancelled){
+
+                    },function(error){
+
+                    });
+
+                </pre>
+
+            </div>
+
+            <hr/>
+
+            <div class="row" id="global">
+                <h3>Zmienne globalne</h3>
+                <p>
+                    Programista ma możliwość za pomocą klasy <code>app.global</code> rejestrowania zmiennych globalnych w wygodny i uporządkowany sposób.
+                    <br/>Przykładowe utworzenie zmiennej globalnej w postaci pojedynczej lub listy zmiennych:
+                </p>
+                <pre class="brush: js;">
+                    app.global.define("globalVariable", 1);
+
+                    app.global.defineMap([
+                        {
+                            name: "globalVariable1",
+                            initial: null
+                        },
+                        {
+                            name: "globalVariable2",
+                            initial: true
+                        }
+                    ]);
+
+                </pre>
+                <p>
+                    Dostęp do zmiennych odbywa się poprzez setter <code>set(value)</code> oraz getter <code>get</code>
+                </p>
+                <pre class="brush: js;">
+                    app.global.globalVariable.get(); //zwraca wartość zmiennej globalnej
+                    app.global.globalVariable.set(false); //ustawia wartość zmiennej globalnej
+                </pre>
+                <p>
+                    lub bez api
+                </p>
+                <pre class="brush: js;">
+                    var x = globalVariable; //przypisuje wartość zmiennej globalnej do zmiennej x
+                    globalVariable = 2; //ustawia wartość zmiennej globalnej na 2
+                </pre>
+            </div>
+
+            <hr/>
+
+            <div class="row" id="controller">
+                <h3>Controller</h3>
+                <p>
+                    Kontrolery w AppMobile Framework tworzymy jako parę kontroler-widok. Kontroler jest głównym elementem składowym aplikacji.
+                    Podstawowy kontroler wygląda następująco:
+                </p>
+                <pre class="brush: js;">
+
+                    app.controller.register("Login", {
+
+                        components: [],
+
+		                view: 'main',
+
+		                init : function(){}
+
+                    });
+
+                </pre>
+                <p>
+                    Element <code>components</code> jest listą nazw komponentów użytych w widoku kontrolera. Nie jest wymagany.
+                    <br/>Pole <code>view</code> jest nazwą elementu DOM w którym widok kontrolera ma być generowany.
+                    <br/>Aby kontroler wyrenderował widok, należy w pliku <code>index.html</code> dodać następujący element:
+                </p>
+                <pre class="brush: plain;">
+                    <div view="main"></div>
+                </pre>
+                <p>
+                    Pole <code>view</code> w kontrolerze jest niewymagane, domyślnie ustawione na wartość <code>view</code>
+                    <br/>W aplikacji może być wyświetlony tylko jeden kontroler jednocześnie. Do kontrolera nie odwołujemy się statycznie, tylko poprzed obiekt <code>app.ctx</code>
+                    oznaczający kontekst kontrolera. Przykładowo chcąc pobierać selektory z widoku kontrolera, odnosimy się poprzez właśnie kontekst.
+                    <br/>Przykładowy widok do kontrolera:
+                </p>
+                  <pre class="brush: plain;">
+                    <div>
+                        <form>
+                            <input type="text" id="inputName" />
+                            <button type="submit"></button>
+                        </form>
+                    </div>
+                </pre>
+                <p>
+                    Chcąc pobrać selektor jQuery elementu o identyfikatorze <code>inputName</code> korzystamy z następującej funkcji:
+                </p>
+                <pre class="brush: js;">
+                    app.ctx.selector.inputName(); //pobiera selektor jQuery
+                </pre>
+                <p>
+                    Kontroler posiada domyślny obiekt do trzymania danych <code>app.ctx.data</code> domyślnie ustawiony jako <code>{}</code>
+                </p>
+                <p>
+                    Aby wyrenderować kontroler, należy użyć funkcji <code>app.system.render</code>
+                    <br/>Dodatkowo, przyjmuje ona także drugi parametr który jest wprowadzany do funkcji <code>init</code>
+                </p>
+                <pre class="brush: js;">
+                    app.system.render(app.controller.Login); //renderuje kontroler Login
+                    app.system.render(app.controller.Login, { username: "Dawid", password: "xxx" });
+                </pre>
+              <pre class="brush: js;">
+
+                    app.controller.register("Login", {
+
+		                init : function(dataFromRender){
+
+                            app.ctx.data = dataFromRender;// przypisuje obiekt { username: "Dawid", password: "xxx" }
+
+                        }
+
+                    });
+
+                </pre>
+                <p>
+                    Jeżeli parametr <code>data</code> nie zostanie wprowadzony, domyślnie ustawiany jest jako <code>null</code>
+                </p>
+            </div>
+
+            <hr/>
+
+            <div class="row" id="modal">
+                <h3>Modal</h3>
+                <p>
+                    Modale w AppMobile Framework tworzymy jako parę kontroler-widok. Modal jest dodatkowym elementem aplikacji, o współbierznym kontekście do kontrolera który go wywołuje.
+                    Jednocześnie możemy wywołać jedno okno modalne. Okna modalne oparte są o <code>Bootstrap</code>
+                    <br/>Podstawowy kontroler okna modalnego wyląda następująco:
+                </p>
+                <pre class="brush: js;">
+
+                    app.modal.register("ExitApp", {
+
+                        init: function(){}
+
+                    });
+
+                </pre>
+                <p>
+                    <br/>Aby okno modalne mogło wyrenderować widok, należy w pliku <code>index.html</code> dodać następujący element:
+                </p>
+                <pre class="brush: plain;">
+                    <div modal="exitApp"></div>
+                </pre>
+                <p>
+                    <br/>W aplikacji może być wyświetlony tylko jedno okno modalne jednocześnie. Do okna modalnego nie odwołujemy się statycznie, tylko poprzed obiekt <code>app.mCtx</code>
+                    oznaczający kontekst kontrolera modala. Przykładowo chcąc pobierać selektory z widoku modala, odnosimy się poprzez właśnie kontekst.
+                    <br/>Przykładowy widok modala w oparciu o <code>Bootstrap</code>:
+                </p>
+                  <pre class="brush: plain;">
+
+                      <div class="modal fade" tabindex="-1" role="dialog" mainmodal>
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Modal title</h4>
+                              </div>
+                              <div class="modal-body">
+                                <p>Are you sure?</p>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                <button type="button" class="btn btn-primary"  id="btnYes">Yes</button>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+
+                </pre>
+                <p>
+                    Uwaga! Główny element DOM w widoku modala musi być opatrzony atrybutem <code>mainmodal</code>
+                    <br/>Chcąc pobrać selektor jQuery elementu o identyfikatorze <code>btnYes</code> korzystamy z następującej funkcji:
+                </p>
+                <pre class="brush: js;">
+                    app.mCtx.selector.btnYes(); //pobiera selektor jQuery
+                </pre>
+                <p>
+                    Kontroler modala posiada domyślny obiekt do trzymania danych <code>app.mCtx.data</code> domyślnie ustawiony jako <code>{}</code>
+                </p>
+                <p>
+                    Aby wyrenderować modal, należy użyć funkcji <code>app.system.renderModal</code>
+                    <br/>Dodatkowo, przyjmuje ona także drugi parametr który jest wprowadzany do funkcji <code>init</code>
+                </p>
+                <pre class="brush: js;">
+                    app.system.renderModal(app.modal.ExitApp); //renderuje kontroler Login
+                    app.system.renderModal(app.modal.ExitApp, { message: "Are you sure?" });
+                </pre>
+              <pre class="brush: js;">
+
+                    app.modal.register("ExitApp", {
+
+		                init : function(dataFromRender){
+
+                            app.mCtx.data = dataFromRender;// przypisuje obiekt { message: "Are you sure?" }
+
+                        }
+
+                    });
+
+                </pre>
+                <p>
+                    Jeżeli parametr <code>data</code> nie zostanie wprowadzony, domyślnie ustawiany jest jako <code>null</code>
+                </p>
+            </div>
+
+            <hr/>
+
+            <div class="row" id="component">
+                <h3>Component</h3>
+                <p>
+                    Komponenty w AppMobile Framework tworzymy jako parę kontroler-widok. Podstawowy komponent wygląda następująco:
+                </p>
+
+               <pre class="brush: js;">
+
+                    app.component.register("TopMenu", {
+
+                        init: function () {}
+
+                    });
+
+                </pre>
+                <p>
+                    Natomiast widok do tego komponentu to:
+                </p>
+                  <pre class="brush: plain;">
+
+                    <div>
+                        <button id="backButton"></button>
+                    </div>
+
+                    </pre>
+
+                <p>
+                    Komponent nie posiada kontekstu tak jak w przypadku okien modalnych czy kontrolerów. Można go wykorzystywać za pomocą referencji globalnej:
+                </p>
+                <pre class="brush: js;">
+
+                    app.component.TopMenu
+
+                </pre>
+                <p>
+                    Aby używać selektorów z widoku komponentu, działamy tak samo jak w przypadku okien modalnych czy kontrolerów:
+                </p>
+              <pre class="brush: js;">
+
+                    app.component.TopMenu.selector.backButton(); //pobiera obiekt jQuery
+
+                </pre>
+                <p>
+                    Dopiszmy event do naszego przycisku:
+                </p>
+                 <pre class="brush: js;">
+
+                    app.component.register("TopMenu", {
+                        init: function () {
+
+                        app.component.TopMenu.selector.backButton().click(function(){
+                            //button clicked!
+                        });
+
+                        }
+                    });
+
+                </pre>
+                <h4>Dodawanie komponentu do kontrolera i jego widoku</h4>
+                <p>
+                    Jeżeli chcemy aby komponent wyświetlił się w danym miejscu, wystarczy dodać w widoku kontrolera następujący kod:
+                    <br/>Uwaga! Nazwę komponentu zaczynamy z małej litery.
+                </p>
+                <pre class="brush: plain;">
+                    <component name="topMenu"></component>
+                </pre>
+                <p>
+                    Dodatkowo w kontrolerze należy dodać komponent do listy komponentów:
+                </p>
+                <pre class="brush: js;">
+                    app.controller.register("Login", {
+
+                        components: ["TopMenu"],
+
+                        view: 'main',
+
+                        init : function(){}
+
+                    });
+
+                </pre>
+
+
+            </div>
+
+            <hr/>
+
+            <div class="row" id="renderer">
+                <h3>Renderer</h3>
+                <p>
+                    Framework posiada mechanizm generowania oraz bindowania list. Polega to na wygenerowaniu listy na podstawie templatki i zestawu danych oraz wstrzyknięcia gotowego html
+                    do wybranego selektora.
+                    <br/> Renderer posiada dwie właściwości przekazywane w templatce:
+                    <br/><code>text(nazwaParametru)</code> przyjmuje na wejściu nazwę parametru z obiektu listy przekazywanej do renderera
+                    <br/><code>event(nazwaFunkcji)</code> przyjmuje na wejściu nazwę funkcji z obiektu przekazywanego do renderera jako bindings
+                    <br/>Przykładowa definicja renderera listy:
+                </p>
+                <pre class="brush: js;">
+
+                    app.renderer.define("ShopList", function(){
+
+                        var template = '';
+
+                        template += '<li>';
+                        template += '     <span>text(name)</span>';
+                        template += '     <span>text(city)</span>';
+                        template += '     <div class="form-group">';
+                        template += '       <button type="button" class="btn white form-control" event(showDetails) >Szczegóły</button>';
+                        template += '     </div>';
+                        template += '</li>';
+
+                        return template;
+
+                    });
+
+                </pre>
+                <p>
+                    Metoda <code>app.renderer.define()</code> może przyjmować jako argument drugi zarówno stringa jak i funkcję zwracającą stringa. Implementacja użycia tego renderera:
+                </p>
+                <pre class="brush: js;">
+                    //na wejściu selektor listy z widoku kontrolera/komponentu
+                    app.renderer.ShopList.render(app.ctx.selector.shopList(),
+                    [
+                        {
+                            name: 'Piotr i Paweł', //wartość wstawiana w miejsce text(name)
+                            city: 'Szczecin'  //wartość wstawiana w miejsce text(city)
+                        },
+                        {
+                            name: 'Castorama',
+                            city: 'Koszalin'
+                        }
+                    ],
+                    {
+
+                        showDetails: function(e){
+                            //realizuje event dla buttona "Szczegóły" z templatki
+                        },
+
+                    });
+                </pre>
+                <p>
+                    Aby pobrać kontekst klikanego elementu, wystarczy wybrać obiekt <code>e.eCtx</code>
+                    <br/>Obiekt <code>e.eCtx</code> posiada wartość, jaka została wprowadzona do renderera. Dla przykładu, wartość po kliknięciu na button wywołujący <code>showDetails</code> pierwszego elemetu listy, będzie odpowiadać obiektowi pierwszego elementu listy danych.
+                </p>
+                <pre class="brush: js;">
+
+                    showDetails: function(e){
+
+                        var obj = e.eCtx; //posiada obiekt kontekstu dla klikanego elementu, czyli obiekt z listy
+
+                    }
+
+                </pre>
+                <p>
+                    Co przykładowo zwraca:
+                </p>
+                <pre class="brush: js;">
+
+                    {
+                        name: 'Castorama',
+                        city: 'Koszalin'
+                    }
+
+                </pre>
+
+            </div>
+
+            <hr/>
+
+
+            <div class="row" id="query">
+                <h3>Query</h3>
+                <p>
+                    Framework umożliwia definiowanie zbiorów zapytań SQL. Można zarówno definować pojedyncze zapytanie jak i listę. Dodatkowo w przypadku listy można grupować zapytania.
+                    <br/>Przykładowa definicja pojedynczego zapytania:
+                </p>
+                <pre class="brush: js;">
+
+                    app.query.define("selectAllUser", "select * from user");
+                    app.query.define("selectUser", "select * from user where id = ?");
+                    app.query.define("selectUser2", "select * from user where id = :id");
+
+                </pre>
+                <p>
+                    Aby wybrać zapytanie oraz wprowadzić parametry piszemy:
+                </p>
+                 <pre class="brush: js;">
+
+                     var sql = app.query.selectAllUser.sql //pobieramy samego sql
+
+                     var sql2 = app.query.selectUser.bind([1]); //wprowadzamy listę wartości
+
+                     var sql3 = app.query.selectUser2.bind({
+                        id: 2
+                     }); //wprowadzamy obiekt
+
+                 </pre>
+                <p>
+                    W przypadku definicji listy zapytań, mechanizm bindowania i pobierania danych jest identyczny.
+                    Przykładowa definicja listy zapytań:
+                </p>
+                <pre class="brush: js;">
+
+                    app.query.defineList([
+                        {
+                            name: "deleteFromClientByName",
+                            sql: "delete from Client where name = ?"
+                        },
+                        {
+                            name: "selectUserAll",
+                            sql: "select * from User"
+                        }
+                    ]);
+
+                </pre>
+                <p>
+                    Aby zgrupować zapytania, wystarczy dodać pole <code>group</code> do obiektu listy.
+                    Grupowanie jest niemożliwe w przypadku pojedynczych definicji zapytań.
+                </p>
+                 <pre class="brush: js;">
+
+                    app.query.defineList([
+                        {
+                            name: "selectUserById",
+                            sql: "select * from User where id = ?",
+                            group: 'user'
+                        },
+                        {
+                            name: "selectUserByName",
+                            sql: "select * from User where name = ?",
+                            group: 'user'
+                        }
+                    ]);
+
+                </pre>
+                <p>
+                    W tym przypadku zgrupowaliśmy zapytania <code>selectUserById</code> i <code>selectUserByName</code>
+                    <br/>Aby je wybrać wystarczy odnieść się do obiektu grupy przed obiektem zapytania:
+                </p>
+                 <pre class="brush: js;">
+
+                      var sql1 = app.query.user.selectUserById.bind([1]);
+                      var sql2 = app.query.user.selectUserByName.bind(["antek"]);
+
+                 </pre>
+
+            </div>
+
+            <hr/>
+
+
+            <div class="row" id="crud">
+                <h3>Crud</h3>
+                <p>
+                    Obiekt <code>app.crud</code> służy do budowania zapytań SQL do bazy SQLLite oraz ich wywoływania.
+                    <br/>Przykładowe wywołanie zapytania SQL i zwrócenie danych:
+                </p>
+                <pre class="brush: js;">
+
+                    app.crud.execute("select * from user", function (userList) {
+
+                        //callback w przypadku prawidłowego zapytania
+
+                    }, function(){
+                        //opcjonalny callback w przypadku wystąpienia błędu
+                    });
+
+                </pre>
+                <p>
+                    <code>app.crud.execute(sql, successCallback, errorCallback)</code> Służy do wywoływania zapytań na bazie SQLLite.
+                    <br/><code>sql</code> może być zarówno funkcją zwracającą zapytanie, jak i stringiem.
+                    <br/><code>successCallback</code> jest opcjonalny, na wejściu przyjmuje obiekt wynikowy oraz w przypadku metody INSERT - id
+                    <br/><code>errorCallback</code> jest opcjonalny, brak wejściowych parametrów
+                </p>
+                <p>
+                    <code>app.crud.builder</code> Służy do budowania zapytań SQL i oferuje następujące funkcje:
+                    <br/><code>app.crud.builder.findById(tableName, id)</code>
+                    <br/><code>app.crud.builder.deleteById(tableName, id)</code>
+                    <br/><code>app.crud.builder.drop(tableName)</code>
+                    <br/><code>app.crud.builder.count(tableName)</code>
+                    <br/><code>app.crud.builder.create(tableName, columns)</code>
+                    <br/><code>app.crud.builder.findAll(tableName)</code>
+                    <br/><code>app.crud.builder.insert(tableName, values, columns)</code>
+                    <br/><code>app.crud.builder.update(tableName, id, values, columns)</code>
+
+                </p>
+            </div>
+
+            <hr/>
+
+            <div class="row" id="Model">
+                <h3>Model</h3>
+                <p>
+                    Framework umożliwia operowanie na lokalnej bazie danych SQLLite. Z tego względu udostępnia możliwość generowania bazy danych w oparciu o model oraz o skrypty SQL.
+                    Podstawowy wygląd modelu:
+                </p>
+                <pre class="brush: js;">
+                    app.model.define(
+                        "Client", //nazwa tabeli - wielkość liter bez znaczenia
+                        ["username", "password"] //lista kolumn
+                    );
+                </pre>
+                <p>
+                    Kolumny są automatycznie poszerzane o kolumnę "id integer primary key". Dodatkowo, wartości boolean w zapytaniach są automatycznie procesowane przez framework  na
+                    wartości typu tekstowego <code>bool_true</code> oraz <code>bool_false</code> w obie strony, co dla wyników zapytań jest transparentne.
+                </p>
+                <p>
+                    Jeżeli w konfiguracji zmienna <code>dbCreateDropFromScript = false</code> to framework buduje bazę danych w opaciu o zadeklarowany model.
+                    <br/>Obiekt modelu posiada dodatkowo następujące pola:
+                    <br/><code>table</code> zawiera nazwę tabeli (notacją UPPERCASE)
+                    <br/><code>columns</code> zawiera listę kolumn (bez id)
+                    <br/><code>columnsAll</code> zawiera listę kolumn
+                    <br/><code>dropSQL</code> zawiera zapytanie SQL <code>DROP TABLE</code>
+                    <br/><code>createSQL</code> zawiera zapytanie SQL <code>CREATE TABLE</code>
+                    <br/><code>findAllSQL</code> zawiera zapytanie SQL <code>SELECT * </code>
+                </p>
+                <p>
+                    Modelu możemy używać do uspójnienia danych w przypadku zapytań do bazy danych.
+                    <br/>Poniżej znajduje się przykładowe wykorzystanie modelu w budowaniu zapytania używając <code>app.crud</code>.
+                </p>
+                <pre class="brush: js;">
+
+                     var insertClientSQL = app.crud.builder.insert(
+                        app.model.Client.table,
+                        ["login", "haslo"],
+                        app.model.Client.columns
+                    );
+
+                    app.crud.execute(insertClientSQL, function (lastId) {
+                        //TODO
+                    });
+
+                </pre>
+
+            </div>
+
+            <hr/>
+
+            <div class="row" id="enumerator">
+                <h3>Enumerator</h3>
+                <p>
+                    Klasa stricte architektoniczna, bez specjalnych właściwości. Umożliwia definowanie enumeratorów w postaci obiektu.
+                    <br/>Przykładowy enumerator:
+                </p>
+                <pre class="brush: js;">
+                    app.enumerator.register("ProductGroup", {
+
+                        alcohol : 'ALCOHOL',
+                        vegetables : 'VEGETABLES',
+                        fruits : 'FRUITS'
+
+                    });
+                </pre>
+                <p>
+                    Następnie w dowolnym miejscu możemy używać zdefiniowanej klasy:
+                </p>
+                <pre class="brush: js;">
+                    app.enumerator.ProductGroup.
+                </pre>
+            </div>
+
+
+            <hr/>
+
+
+            <div class="row" id="service">
+                <h3>Serwisy</h3>
+                <p>
+                    Framework umożliwia definiowanie własnych serwisów. Mają one jedynie charakter architektoniczny i nie posiadają żadnych specjalnych właściwości. Są instancjami statycznymi.
+                    <br/>Zgodnie z ogólnie przyjętymi wzorcami, serwisy odpowiadają za logikę biznesową aplikacji oraz stanowią warstwę komunikacyjną między kontrolerem a bazą danych/zasobami REST
+                </p>
+                <pre class="brush: js;">
+
+                    app.service.register("Auth", {
+
+                        login: function(username, password){
+                            //rest calls etc
+                        }
+
+                    });
+
+                </pre>
+                <p>
+                    Aby wywołać metodę serwisu odnosimy się do obiektu <code>app.service</code>
+                </p>
+                 <pre class="brush: js;">
+                    app.service.Auth.login("login", "pass");
+                 </pre>
+            </div>
+
+
+            <hr/>
+
+
+            <div class="row" id="util">
+                <h3>Utile</h3>
+                <p>
+                    Framework umożliwia definiowanie własnych utili. Mają one jedynie charakter pomocniczy i nie posiadają żadnych specjalnych właściwości. Są instancjami statycznymi.
+                </p>
+                <pre class="brush: js;">
+
+                    app.util.register("General", {
+
+                        isNull: function(obj){
+                            //check if null
+                        }
+
+                    });
+
+                </pre>
+                <p>
+                    Aby wywołać metodę utila odnosimy się do obiektu <code>app.util</code>
+                </p>
+                 <pre class="brush: js;">
+                    app.util.General.isNull(null);
+                 </pre>
+            </div>
+
+
+            <hr/>
+
+
+            <div class="row" id="message">
+                <h3>Message</h3>
+                <p>
+                    Framework appMobile umożliwia obsługę wielu języków.
+                </p>
+            </div>
+
+            <hr/>
+            <div class="row" id="mock">
+                <h3>Mock</h3>
+                <p>
+                    Framework umożliwia stworzenie mocków komunikacji serwer-aplikacja.
+                </p>
+            </div>
+
+            <hr/>
+
+
+            <div class="row" id="rest">
+                <h3>REST</h3>
+                Todo
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+
+    .padding-left {
+        padding-left: 50px;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+    .border-right {
+        border-right: 2px solid lightgray;
+    }
+
+</style>
+
+<script src="../www/js/jquery.min.js" defer></script>
+<script src="../www/js/bootstrap.min.js" defer></script>
+<link rel="stylesheet" href="../www/css/font-awesome.min.css" async>
+
+
+</body>
+
+</html>
