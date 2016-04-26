@@ -3,6 +3,17 @@ app.rest = {
     spinnerFunct: function(){
     },
 
+    getFile: function(url, successCallback, errorCallback){
+
+        $.ajax({
+            url: url,
+            success: successCallback,
+            error: errorCallback,
+            cache: false
+        });
+    
+    },
+
     get: function (url, successCallback, errorCallback, headers) {
         app.rest.getDelete(url, 'GET', successCallback, errorCallback, headers);
     },
@@ -29,7 +40,7 @@ app.rest = {
         }
 
     },
-    
+
     getDelete: function (url, method, urlParams, successCallback, errorCallback, headers) {
 
         app.rest.isMock(url, method, null, successCallback, function(){
@@ -62,7 +73,7 @@ app.rest = {
                     if(errorCallback !== undefined){
                         errorCallback(jqXHR.status, jqXHR);
                     }
-                    
+
                 }
             });
 
@@ -70,7 +81,7 @@ app.rest = {
         });
 
 
-        
+
     },
 
     postPut: function (url, method, request, successCallback, errorCallback, headers, urlParams) {
@@ -109,7 +120,7 @@ app.rest = {
             });
 
         });
-       
+
     }
 
 
