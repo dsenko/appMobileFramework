@@ -118,6 +118,8 @@ app.system = {
 
         if (app.mCtx) {
             app.mCtx.hide();
+            app.mCtx = null;
+
         }
 
     },
@@ -137,7 +139,7 @@ app.system = {
                 }else{
                     app.database.createDB(callBack);
                 }
-                
+
             });
 
         });
