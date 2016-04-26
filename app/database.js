@@ -58,7 +58,7 @@ app.database = {
 
         if (app.config.dbTestMode) {
 
-            app.rest.getFile(app.config.dbTestScript, function (data) {
+            $.get(app.config.dbTestScript, function (data) {
 
                 if (data.trim().length == 0) {
                     console.log('callback 2');
@@ -106,7 +106,7 @@ app.database = {
 
         } else {
 
-            app.rest.getFile(app.config.dbProductionScript, function (data) {
+            $.get(app.config.dbProductionScript, function (data) {
 
                 if (data.trim().length == 0) {
                     console.log('callback 3');
@@ -160,7 +160,7 @@ app.database = {
 
         if (app.config.dbCreateDropFromScript) {
 
-            app.rest.getFile(app.config.dbCreateScript, function (data) {
+            $.get(app.config.dbCreateScript, function (data) {
 
                 if (data.trim().length == 0) {
                     callBack();
@@ -222,7 +222,7 @@ app.database = {
 
         if (app.config.dbCreateDropFromScript) {
 
-            app.rest.getFile(app.config.dbDropScript, function (data) {
+            $.get(app.config.dbDropScript, function (data) {
 
                 if (data.trim().length == 0) {
                     callBack();

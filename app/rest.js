@@ -3,17 +3,6 @@ app.rest = {
     spinnerFunct: function(){
     },
 
-    getFile: function(url, successCallback, errorCallback){
-
-        $.ajax({
-            url: url,
-            success: successCallback,
-            error: errorCallback,
-            cache: false
-        });
-    
-    },
-
     get: function (url, successCallback, errorCallback, headers) {
         app.rest.getDelete(url, 'GET', successCallback, errorCallback, headers);
     },
