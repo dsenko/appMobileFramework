@@ -29,17 +29,17 @@ app.cordova = {
 
 
     onBack : function(e){
-        
+
         if(e){
             e.preventDefault();
         }
-        
-        console.log('x');
+
         if(app.mCtx !== null && app.mCtx.onBack !== undefined){
             app.mCtx.onBack();
         }else if(app.mCtx !== null && app.mCtx.onBack == undefined) {
             app.system.hideModal();
         }else if(app.ctx !== null && app.ctx.onBack !== undefined){
+            app.system.hideModal();
             app.ctx.onBack();
         }else{
 

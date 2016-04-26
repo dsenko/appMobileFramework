@@ -22,12 +22,12 @@ app.system = {
             var newId = id + '-' + app.util.System.hash();
 
             selectors[id] = function () {
-                
+
                 var selector = $('#' + newId);
                 selector.plainId = newId;
-                
+
                 return selector;
-                
+
             };
 
             templateHtml = templateHtml.replace('id="'+id+'"', 'id="'+newId+'"');
@@ -116,9 +116,8 @@ app.system = {
 
     hideModal: function () {
 
-        if (app.mCtx != null) {
+        if (app.mCtx) {
             app.mCtx.hide();
-            app.mCtx = null;
         }
 
     },

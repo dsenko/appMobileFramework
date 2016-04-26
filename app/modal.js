@@ -24,12 +24,16 @@ app.modal = {
             }
 
             obj.show = function () {
+
                 app.modal[name].selfSelector().modal('show');
+                app.modal[name].selfSelector().on('hidden.bs.modal', function () {
+                    app.mCtx = null;
+                })
+
             };
 
             obj.hide = function () {
                 app.modal[name].selfSelector().modal('hide');
-                app.mCtx = null;
             };
 
             obj.render = function (data) {
