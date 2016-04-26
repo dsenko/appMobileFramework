@@ -27,9 +27,15 @@ app.database = {
 
                 app.database.dbDrop(function () {
                     app.database.dbCreate(function () {
+
+                        console.log('DB created');
                         app.database.dbLoadData(function () {
+
+                            console.log('DB loaded');
                             app.system.mainRender(callBack);
+
                         });
+
                     });
                 });
 
@@ -64,17 +70,20 @@ app.database = {
                     console.log('callback 2');
                     finished = true;
                     callBack();
-
                 } else {
 
                     var queries = [];
                     var splitted = data.split(';');
 
+
                     for (var i = 0; i < splitted.length; i++) {
-                        if (splitted[i].trim().length > 0 && splitted[i].trim().indexOf('/*') == 0) {
+
+                        if (splitted[i].trim().length > 0) {
                             queries.push(splitted[i].trim());
                         }
+
                     }
+
 
                     for (var i = 0; i < queries.length; i++) {
 
