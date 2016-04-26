@@ -126,9 +126,20 @@ app.system = {
     init: function (callBack) {
 
         $(document).ready(function () {
+
             app.cordova.initializeCordova(function () {
-                app.database.createDB(callBack);
+
+
+                if(app.config.mobileRun){
+                    app.cordova.deviceReadyCallBack = function(){
+                        app.database.createDB(callBack);
+                    };
+                }else{
+                    app.database.createDB(callBack);
+                }
+                
             });
+
         });
 
 

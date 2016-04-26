@@ -1,5 +1,7 @@
 app.dbTablesCount = 0;
 
+var DB_INSTANCE = null;
+
 app.database = {
 
     dbName: '',
@@ -18,10 +20,15 @@ app.database = {
         } else {
 
             if (app.config.mobileRun) {
-                app.DB_INSTANCE = window.sqllitePlugin.openDatabase(app.database.dbName, app.database.dbVersion, app.database.dbName + '_manager', app.database.dbSize);
+
+               app.DB_INSTANCE = window.sqlitePlugin.openDatabase({ name: app.database.dbName, location: 'default' });
+
             } else {
                 app.DB_INSTANCE = openDatabase(app.database.dbName, app.database.dbVersion, app.database.dbName + '_manager', app.database.dbSize);
             }
+
+            console.log(app.DB_INSTANCE);
+            
 
             if (app.config.dbMode == 'create-drop') {
 
