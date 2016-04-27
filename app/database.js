@@ -27,8 +27,6 @@ app.database = {
                 app.DB_INSTANCE = openDatabase(app.database.dbName, app.database.dbVersion, app.database.dbName + '_manager', app.database.dbSize);
             }
 
-            console.log(app.DB_INSTANCE);
-            
 
             if (app.config.dbMode == 'create-drop') {
 

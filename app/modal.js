@@ -25,18 +25,46 @@ app.modal = {
 
             obj.show = function () {
 
+                $('body').removeClass('modal-open');
+
+                var backgroundModalSelector = $('.modal-backdrop');
+
+                if(backgroundModalSelector && backgroundModalSelector.length > 1){
+                    console.log('removing');
+                    $(backgroundModalSelector[0]).fadeOut(200, function(){ $(this).remove();});
+                }
+
                 app.modal[name].selfSelector().modal('show');
+
                 app.modal[name].selfSelector().on('hidden.bs.modal', function () {
-                    app.mCtx = null;
+
+
+                    if(app.mCtx !== null) {
+                        if (app.mCtx.onHide !== undefined) {
+                            app.mCtx.onHide();
+                        }
+
+                        app.mCtx = null;
+
+                    }
+
+                   /* if( app.modal[name].callBackHideAdditional !== undefined){
+                        app.modal[name].callBackHideAdditional();
+                    }*/
+
                 })
 
             };
 
-            obj.hide = function () {
+            obj.hide = function (callBack) {
+                //app.modal[name].callBackHideAdditional = callBack;
                 app.modal[name].selfSelector().modal('hide');
             };
 
             obj.render = function (data) {
+
+
+
                 $('[modal="' + obj.name + '"]').html(obj.template);
                 obj.selfSelector().modal();
                 obj.init(data);

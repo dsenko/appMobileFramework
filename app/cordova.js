@@ -42,19 +42,17 @@ app.cordova = {
         } else if (app.ctx !== null && app.ctx.onBack !== undefined) {
             app.system.hideModal();
             app.ctx.onBack();
-        } else {
+        }else{
 
-            if (app.events.onBack !== undefined) {
-                app.events.onBack();
-            }
+                if (app.events.onBack !== undefined) {
+                    app.events.onBack();
+                }
 
         }
 
     },
 
     onDeviceReady: function () {
-        app.cordova.checkNetwork(function () {
-        });
 
         if (app.cordova.deviceReadyCallBack !== undefined && app.cordova.deviceReadyCallBack !== null) {
             app.cordova.deviceReadyCallBack();

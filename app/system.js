@@ -6,6 +6,8 @@ var app = {
     mCtx: null,
     DB_INSTANCE: null,
     online: false,
+    lastControllerName: null,
+    lastModalName: null,
 };
 
 
@@ -68,9 +70,17 @@ app.system = {
 
     renderModal: function (_modal, data) {
 
-        app.cordova.checkNetwork();
+        if(app.mCtx){
+            app.lastModalName = _modal.fullName;
+        }
 
         app.system.waitUntilReady(_modal, function () {
+
+            if(_modal.checkNetwork == true){
+                app.cordova.checkNetwork();
+            }
+
+            app.system.hideModal();
 
             app.mCtx = $.extend(true, {}, app.modal[_modal.fullName]);
 
@@ -85,7 +95,9 @@ app.system = {
 
     render: function (_controller, data, callBack) {
 
-        app.cordova.checkNetwork();
+        if(app.ctx !== null){
+            app.lastControllerName = app.ctx.fullName;
+        }
 
         app.system.waitUntilReady(_controller, function () {
 
@@ -95,6 +107,10 @@ app.system = {
 
                 app.system.hideModal();
 
+                if(_controller.checkNetwork == true){
+                    app.cordova.checkNetwork();
+                }
+
                 if (data == undefined) {
                     data = null;
                 }
@@ -102,7 +118,9 @@ app.system = {
                 app.ctx.render(data);
 
                 $.each(app.ctx.components, function (i, componentName) {
+
                     app.component[componentName].init(data);
+
                 });
 
                 if(callBack !== undefined) {
@@ -114,11 +132,20 @@ app.system = {
         });
     },
 
+    backPrevious: function(){
+
+        if(app.lastControllerName !== null){
+            app.system.render(app.controller[app.lastControllerName]);
+        }
+
+
+    },
+
     hideModal: function () {
 
         if (app.mCtx) {
             app.mCtx.hide();
-            app.mCtx = null;
+                app.mCtx = null;
 
         }
 
@@ -130,7 +157,6 @@ app.system = {
         $(document).ready(function () {
 
             app.cordova.initializeCordova(function () {
-
 
                 if(app.config.mobileRun){
                     app.cordova.deviceReadyCallBack = function(){

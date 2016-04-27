@@ -18,8 +18,6 @@ app.renderer = {
 
                 var elementsHtml = [];
 
-                console.log(html);
-
                 var dataIds = [];
 
                 var templatehtml = this.template;
