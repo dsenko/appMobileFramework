@@ -63,6 +63,28 @@ app.renderer = {
 
                 var dataIdsLocal = dataIds;
 
+                $.each(bindings, function(functionName, functionCallback){
+
+                    listSelector.on('click', '[event="'+functionName+'"]', function(e){
+
+                        var arrtributeDataId = $(e.currentTarget).attr('dataId');
+
+                        $.each(dataIdsLocal, function(i, dataId){
+
+                            if(dataId.dataId == arrtributeDataId){
+                                e.eCtx = dataId.context;
+                            }
+
+                        });
+
+                        functionCallback(e);
+
+                    });
+
+                });
+
+
+                /*
                 for(var prop in bindings){
 
                     var event = 'click'
@@ -86,7 +108,7 @@ app.renderer = {
 
                    });
 
-                }
+                }*/
 
             }
 

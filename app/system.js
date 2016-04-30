@@ -90,6 +90,11 @@ app.system = {
 
             app.mCtx.render(data);
 
+            if( app.events.onRender !== null){
+                app.events.onRender();
+            }
+
+
         });
     },
 
@@ -117,6 +122,10 @@ app.system = {
 
                 app.ctx.render(data);
 
+                if( app.events.onRender !== null){
+                    app.events.onRender();
+                }
+                
                 $.each(app.ctx.components, function (i, componentName) {
 
                     app.component[componentName].init(data);

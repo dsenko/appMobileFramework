@@ -18,6 +18,10 @@ app.events = {
 
     extend: function(eventName, eventCallback){
 
+        if(eventName == "render"){
+            eventName = "onRender";
+        }
+        
         if(eventName == "offline"){
             eventName = "onOffline";
         }
