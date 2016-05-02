@@ -74,13 +74,13 @@ app.system = {
             app.lastModalName = _modal.fullName;
         }
 
+        app.system.hideModal();
+
         app.system.waitUntilReady(_modal, function () {
 
             if(_modal.checkNetwork == true){
                 app.cordova.checkNetwork();
             }
-
-            app.system.hideModal();
 
             app.mCtx = $.extend(true, {}, app.modal[_modal.fullName]);
 
@@ -154,8 +154,6 @@ app.system = {
 
         if (app.mCtx) {
             app.mCtx.hide();
-                app.mCtx = null;
-
         }
 
     },
