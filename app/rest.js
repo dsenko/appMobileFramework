@@ -3,12 +3,12 @@ app.rest = {
     spinnerFunct: function(){
     },
 
-    get: function (url, successCallback, errorCallback, headers) {
-        app.rest.getDelete(url, 'GET', successCallback, errorCallback, headers);
+    get: function (url, successCallback, errorCallback, headers, urlParams) {
+        app.rest.getDelete(url, 'GET', urlParams, successCallback, errorCallback, headers);
     },
 
-    delete: function (url, successCallback, errorCallback, headers) {
-        app.rest.getDelete(url, 'DELETE', successCallback, errorCallback, headers);
+    delete: function (url, successCallback, errorCallback, headers, urlParams) {
+        app.rest.getDelete(url, 'DELETE', urlParams, successCallback, errorCallback, headers);
     },
 
     update: function (url, request, successCallback, errorCallback, headers) {
@@ -60,7 +60,9 @@ app.rest = {
                 error: function (jqXHR, textStatus, errorThrown) {
 
                     if(errorCallback !== undefined){
-                        errorCallback(jqXHR.status, jqXHR);
+
+                        errorCallback(JSON.parse(jqXHR.statusText), jqXHR.status, jqXHR);
+
                     }
 
                 }
@@ -104,7 +106,13 @@ app.rest = {
                     successCallback(data);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    errorCallback(jqXHR.status, jqXHR);
+
+                    if(errorCallback !== undefined){
+
+                        errorCallback(JSON.parse(jqXHR.statusText), jqXHR.status, jqXHR);
+
+                    }
+
                 }
             });
 

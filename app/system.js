@@ -125,7 +125,7 @@ app.system = {
                 if( app.events.onRender !== null){
                     app.events.onRender();
                 }
-                
+
                 $.each(app.ctx.components, function (i, componentName) {
 
                     app.component[componentName].init(data);
