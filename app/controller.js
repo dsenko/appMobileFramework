@@ -24,7 +24,9 @@ app.controller = {
             app.system.render(obj.components[i]);
         }
 
-        obj.data = {};
+        if(obj.data == undefined){
+            obj.data = {};
+        }
 
         obj.ready = false;
         app.controller[name] = obj;

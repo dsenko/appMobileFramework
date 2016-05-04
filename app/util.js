@@ -5,6 +5,22 @@ app.util = {
 
     System: {
 
+        parseJSON: function(s){
+
+            s = s.replace(/\\n/g, "\\n")
+                .replace(/\\'/g, "\\'")
+                .replace(/\\"/g, '\\"')
+                .replace(/\\&/g, "\\&")
+                .replace(/\\r/g, "\\r")
+                .replace(/\\t/g, "\\t")
+                .replace(/\\b/g, "\\b")
+                .replace(/\\f/g, "\\f");
+            s = s.replace(/[\u0000-\u0019]+/g,"");
+            var o = JSON.parse(s);
+
+            return o;
+        },
+
         isNull: function(obj){
 
             if(obj == undefined || obj == null){
@@ -20,7 +36,7 @@ app.util = {
             for(var prop in params){
                 url = url.replace('{'+prop+'}', params[prop]);
             }
-            
+
             return url;
 
         },

@@ -61,7 +61,9 @@ app.rest = {
 
                     if(errorCallback !== undefined){
 
-                        errorCallback(JSON.parse(jqXHR.statusText), jqXHR.status, jqXHR);
+                        console.log(jqXHR);
+                        
+                        errorCallback(app.util.System.parseJSON(jqXHR.statusText), jqXHR.status, jqXHR);
 
                     }
 
@@ -109,7 +111,9 @@ app.rest = {
 
                     if(errorCallback !== undefined){
 
-                        errorCallback(JSON.parse(jqXHR.statusText), jqXHR.status, jqXHR);
+                        console.log(jqXHR);
+                        
+                        errorCallback(app.util.System.parseJSON(jqXHR.statusText), jqXHR.status, jqXHR);
 
                     }
 

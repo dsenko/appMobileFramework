@@ -70,6 +70,8 @@ app.system = {
 
     renderModal: function (_modal, data) {
 
+        $(window).scrollTop(0);
+        
         if(app.mCtx){
             app.lastModalName = _modal.fullName;
         }
@@ -99,6 +101,8 @@ app.system = {
     },
 
     render: function (_controller, data, callBack) {
+
+        $(window).scrollTop(0);
 
         if(app.ctx !== null){
             app.lastControllerName = app.ctx.fullName;
@@ -135,6 +139,9 @@ app.system = {
                 if(callBack !== undefined) {
                     callBack();
                 }
+
+
+
             });
 
 
