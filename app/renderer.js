@@ -10,6 +10,8 @@ app.renderer = {
             htmlTemplate = template();
         }
 
+        htmlTemplate = app.message.replace(htmlTemplate);
+
         var obj = {
 
             template: htmlTemplate,

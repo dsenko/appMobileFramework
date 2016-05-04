@@ -90,7 +90,7 @@ app.system = {
 
             app.mCtx.render(data);
 
-            if( app.events.onRender !== null){
+            if( app.events.onRender !== undefined && app.events.onRender !== null){
                 app.events.onRender();
             }
 
@@ -122,7 +122,7 @@ app.system = {
 
                 app.ctx.render(data);
 
-                if( app.events.onRender !== null){
+                if( app.events.onRender !== undefined && app.events.onRender !== null){
                     app.events.onRender();
                 }
 
