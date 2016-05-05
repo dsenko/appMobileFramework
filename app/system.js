@@ -8,6 +8,7 @@ var app = {
     online: false,
     lastControllerName: null,
     lastModalName: null,
+    langChanged: false,
 };
 
 
@@ -71,7 +72,7 @@ app.system = {
     renderModal: function (_modal, data) {
 
         $(window).scrollTop(0);
-        
+
         if(app.mCtx){
             app.lastModalName = _modal.fullName;
         }
@@ -184,6 +185,27 @@ app.system = {
 
         });
 
+
+    },
+
+    changeLanguage: function(langCode){
+        app.config.lang = langCode;
+
+        console.log(app.config.lang);
+
+        $.each(app.controller, function(controllerName, controllerObj){
+
+            if(controllerName !== 'register'){
+
+                var templateHtml = app.controller[controllerName].plainTemplate
+                templateHtml = app.message.replace(templateHtml);
+                app.controller[controllerName].template = templateHtml;
+                
+            }
+
+        });
+
+        app.system.render(app.controller[app.ctx.fullName], app.ctx.data)
 
     },
 

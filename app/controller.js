@@ -43,7 +43,6 @@ app.controller = {
             app.controller[name].selector = selectorsObj.selectors;
             templateHtml = selectorsObj.html;
 
-            templateHtml = app.message.replace(templateHtml);
 
             $.each(app.controller[name].components, function(i, componentName){
                 var _component = app.component[componentName];
@@ -51,6 +50,9 @@ app.controller = {
                 templateHtml = templateHtml.split('<component name="'+_component.name+'"></component>').join(_component.template);
             });
 
+            app.controller[name].plainTemplate = templateHtml;
+
+            templateHtml = app.message.replace(templateHtml);
             app.controller[name].template = templateHtml;
             $(tempTemplateId).remove();
 

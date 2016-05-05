@@ -32,8 +32,6 @@ app.component = {
             app.component[name].selector = selectorsObj.selectors;
             templateHtml = selectorsObj.html;
 
-            templateHtml = app.message.replace(templateHtml);
-
             app.component[name].template = templateHtml;
             $(tempTemplateId).remove();
 
