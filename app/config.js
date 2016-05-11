@@ -2,6 +2,8 @@ app.config = {
 
     mobileRun: false,
 
+    debug: true,
+    
     mockApi: false,
     
     mainController: "Home",
