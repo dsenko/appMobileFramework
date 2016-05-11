@@ -63,7 +63,7 @@ app.modal = {
             app.modal[name].selector = selectorsObj.selectors;
             templateHtml = selectorsObj.html;
             templateHtml = app.message.replace(templateHtml);
-            
+
             app.modal[name].template = templateHtml;
 
             $(tempTemplateId).remove();
@@ -75,3 +75,5 @@ app.modal = {
     },
 
 };
+
+$amr = app.modal.register;

@@ -44,3 +44,5 @@ app.component = {
     }
 
 };
+
+$acor = app.component.register;

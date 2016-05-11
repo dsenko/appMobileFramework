@@ -11,12 +11,12 @@ app.rest = {
         app.rest.getDelete(url, 'DELETE', urlParams, successCallback, errorCallback, headers);
     },
 
-    update: function (url, request, successCallback, errorCallback, headers) {
-        app.rest.postPut(url, 'PUT', request, successCallback, errorCallback, headers);
+    update: function (url, request, successCallback, errorCallback, headers, urlParams) {
+        app.rest.postPut(url, 'PUT', request, successCallback, errorCallback, headers, urlParams);
     },
 
-    post: function (url, request, successCallback, errorCallback, headers) {
-        app.rest.postPut(url, 'POST', request, successCallback, errorCallback, headers);
+    post: function (url, request, successCallback, errorCallback, headers, urlParams) {
+        app.rest.postPut(url, 'POST', request, successCallback, errorCallback, headers, urlParams);
     },
 
     isMock: function(url, method, request, successCallback, callBackIsnt){
@@ -62,7 +62,7 @@ app.rest = {
                     if(errorCallback !== undefined){
 
                         console.log(jqXHR);
-                        
+
                         errorCallback(app.util.System.parseJSON(jqXHR.statusText), jqXHR.status, jqXHR);
 
                     }
@@ -72,8 +72,6 @@ app.rest = {
 
 
         });
-
-
 
     },
 
@@ -112,7 +110,7 @@ app.rest = {
                     if(errorCallback !== undefined){
 
                         console.log(jqXHR);
-                        
+
                         errorCallback(app.util.System.parseJSON(jqXHR.statusText), jqXHR.status, jqXHR);
 
                     }

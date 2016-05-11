@@ -5,3 +5,5 @@ app.enumerator = {
     }
 
 };
+
+$ae = app.enumerator;
