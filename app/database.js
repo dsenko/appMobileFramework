@@ -46,8 +46,11 @@ app.database = {
 
             } else if (app.config.dbMode == 'create') {
 
-                if (localStorage.getItem('db_created') == null) {
+                console.log('created '+localStorage.getItem('db_created'));
+                if (localStorage.getItem('db_created') == null || localStorage.getItem('db_created') == undefined || localStorage.getItem('db_created').length == 0) {
+                   console.log('create db 222');
                     app.database.dbCreate(function () {
+                        console.log('created db');
                         app.database.dbLoadData(function () {
                             app.system.mainRender(callBack);
                             localStorage.setItem('db_created', true);
@@ -68,6 +71,8 @@ app.database = {
         var finished = false;
 
         if (app.config.dbTestMode) {
+
+            console.log('xxx');
 
             $.get(app.config.dbTestScript, function (data) {
 
@@ -211,7 +216,10 @@ app.database = {
 
         } else {
 
+            console.log('from model');
             for (var i = 0; i < app.model.createScripts.length; i++) {
+
+                console.log(app.model.createScripts);
 
                 app.crud.execute(app.model.createScripts[i], function (data) {
 

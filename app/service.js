@@ -3,5 +3,3 @@ app.service = {
         app.service[name] = obj;
     }
 };
-
-$asr = app.service.register;

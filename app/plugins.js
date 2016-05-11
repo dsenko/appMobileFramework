@@ -17,5 +17,3 @@ app.plugins = {
 
 
 };
-
-$apw = app.plugins.wrapper;

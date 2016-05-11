@@ -197,7 +197,3 @@ app.crud = {
     }
 
 };
-
-
-$ace = app.crud.execute;
-$acb = app.crud.builder;

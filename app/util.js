@@ -53,7 +53,7 @@ app.util = {
             var arr2 = [];
 
             for (var i = 0; i < arr.length; i++) {
-                arr2.push(arr[i].replace(first, '').replace(last, ''));
+                arr2.push(arr[i].replace('id="', '').replace('"', ''));
             }
 
             return arr2;

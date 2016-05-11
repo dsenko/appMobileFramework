@@ -20,6 +20,10 @@ app.controller = {
 
         obj.componentsReady = 0;
 
+        for(var i = 0;i<obj.components;i++){
+            app.system.render(obj.components[i]);
+        }
+
         if(obj.data == undefined){
             obj.data = {};
         }
@@ -40,27 +44,12 @@ app.controller = {
             templateHtml = selectorsObj.html;
 
 
-            if(app.controller[name].components instanceof Array){
+            $.each(app.controller[name].components, function(i, componentName){
+                var _component = app.component[componentName];
 
-                $.each(app.controller[name].components, function(i, componentName){
-                    var _component = app.component[componentName];
+                templateHtml = templateHtml.split('<component name="'+_component.name+'"></component>').join(_component.template);
+            });
 
-                    templateHtml = templateHtml.split('<component name="'+_component.name+'"></component>').join(_component.template);
-                });
-
-                
-            }else{
-
-                $.each(app.controller[name].components, function(componentName, componentParams){
-                    var _component = app.component[componentName];
-
-                    templateHtml = templateHtml.split('<component name="'+_component.name+'"></component>').join(_component.template);
-                });
-
-                
-            }
-            
-        
             app.controller[name].plainTemplate = templateHtml;
 
             templateHtml = app.message.replace(templateHtml);
@@ -74,5 +63,3 @@ app.controller = {
     },
 
 };
-
-$acr = app.controller.register;

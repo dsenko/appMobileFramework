@@ -122,6 +122,4 @@ app.renderer = {
 
     }
 
-}
-
-$ard = app.renderer.define;
+};

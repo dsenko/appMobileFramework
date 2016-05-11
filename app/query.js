@@ -81,6 +81,3 @@ app.query = {
     }
 
 };
-
-$aql = app.query.defineList;
-$aqd = app.query.define;

@@ -36,18 +36,13 @@ app.cordova = {
         }
 
         if (app.mCtx !== null && app.mCtx.onBack !== undefined) {
-            console.log('on back mctx');
             app.mCtx.onBack();
         } else if (app.mCtx !== null && app.mCtx.onBack == undefined) {
-            console.log('on back mctx2');
             app.system.hideModal();
         } else if (app.ctx !== null && app.ctx.onBack !== undefined) {
-            console.log('on back ctx');
             app.system.hideModal();
             app.ctx.onBack();
         }else{
-
-            console.log('on back event');
 
                 if (app.events.onBack !== undefined) {
                     app.events.onBack();

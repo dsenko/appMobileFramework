@@ -49,5 +49,3 @@ app.model = {
 
     }
 };
-
-$amd = app.model.define;
