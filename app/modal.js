@@ -44,17 +44,42 @@ app.modal = {
             };
 
             obj.hide = function (callBack) {
-                app.modal[name].selfSelector().modal('hide');
+
+                if(!app.modal[name].preventDismiss){
+                    app.modal[name].selfSelector().modal('hide');
+                }
+
+
             };
 
             obj.render = function (data) {
 
                 $('[modal="' + obj.name + '"]').html(obj.template);
-                obj.selfSelector().modal();
+
+                if(obj.preventDismiss){
+                    obj.selfSelector().modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                }else{
+                    obj.selfSelector().modal();
+                }
+
+
                 obj.init(data);
                 obj.show();
 
             };
+
+            obj.forceHide = function(){
+
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                $('[modal="' + obj.name + '"]').html('');
+                app.mCtx = null;
+
+            }
 
             var templateHtml = $(tempTemplateId).html();
 
@@ -63,7 +88,7 @@ app.modal = {
             app.modal[name].selector = selectorsObj.selectors;
             templateHtml = selectorsObj.html;
             templateHtml = app.message.replace(templateHtml);
-            
+
             app.modal[name].template = templateHtml;
 
             $(tempTemplateId).remove();

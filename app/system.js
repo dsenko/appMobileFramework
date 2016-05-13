@@ -1,8 +1,6 @@
 
 $.app = {};
 
-
-
 var app = {
     ctx: null,
     mCtx: null,
@@ -21,15 +19,45 @@ app.system = {
         var selectors = {};
 
         var idList = app.util.System.findStringBetween(templateHtml, 'id="', '"');
+        var nameList = app.util.System.findStringBetween(templateHtml, 'name="', '"');
+
+
+        selectors.names = {};
+
+        $.each(nameList, function (i, name) {
+
+            console.log(name);
+
+            var selector = $('*[name="' + name+'"]');
+            selector.plainName = name;
+            selector.plainSelector = '*[name="' + name+'"]';
+
+            selectors.names[name] = function(){
+                return selector;
+            }
+
+        });
 
         $.each(idList, function (i, id) {
 
             var newId = id + '-' + app.util.System.hash();
 
-            selectors[id] = function () {
+            selectors[id] = function (eventsToBind) {
 
                 var selector = $('#' + newId);
                 selector.plainId = newId;
+
+                $.each(eventsToBind, function(eventName, eventCallback){
+
+                    if(eventName == 'click'){
+                        selector.click(eventCallback);
+                    }else if(eventName == 'change'){
+                        selector.change(eventCallback);
+                    }else {
+                        selector.on(eventName, eventCallback);
+                    }
+
+                });
 
                 return selector;
 
@@ -133,11 +161,22 @@ app.system = {
                     app.events.onRender();
                 }
 
-                $.each(app.ctx.components, function (i, componentName) {
 
-                    app.component[componentName].init(data);
+                if(app.ctx.components instanceof Array){
 
-                });
+                    $.each(app.ctx.components, function(i, componentName){
+                        app.component[componentName].init(data);
+                    });
+
+                }else{
+
+                    $.each(app.ctx.components, function(componentName, componentParams){
+                        var params = $.app.extendObj(data, componentParams);
+                        app.component[componentName].init(params);
+                    });
+
+
+                }
 
                 if(callBack !== undefined) {
                     callBack();
@@ -217,9 +256,7 @@ app.system = {
 
     mainRender: function (callBack) {
         app.system.render(app.controller[app.config.mainController], null, callBack);
-    }
-
+    },
 
 };
-
 

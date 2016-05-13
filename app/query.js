@@ -50,7 +50,7 @@ app.query = {
 
             },
 
-            execute: function(successCallback, errorCallback, valueList){
+            execute: function(valueList, successCallback, errorCallback){
 
                 var sqlToExecute = this.sql;
 
@@ -58,7 +58,7 @@ app.query = {
                     sqlToExecute = this.bind(valueList);
                 }
 
-                crud.execute(sqlToExecute, successCallback, errorCallback);
+                app.crud.execute(sqlToExecute, successCallback, errorCallback);
             }
 
 
@@ -81,3 +81,6 @@ app.query = {
     }
 
 };
+
+$aql = app.query.defineList;
+$aqd = app.query.define;

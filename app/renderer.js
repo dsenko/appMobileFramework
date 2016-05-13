@@ -1,19 +1,26 @@
 app.renderer = {
 
-    define: function(name, template){
+    define: function(name, template, renderPerContext){
 
         var htmlTemplate = null;
 
+        if(renderPerContext == undefined || renderPerContext == null){
+            renderPerContext = false;
+        }
+
         if(typeof template == 'string'){
             htmlTemplate = template;
-        }else{
+        }else if(renderPerContext == false){
             htmlTemplate = template();
+        }else{
+            htmlTemplate = template;
         }
 
         htmlTemplate = app.message.replace(htmlTemplate);
 
         var obj = {
 
+            renderPerContext: renderPerContext,
             template: htmlTemplate,
 
             render: function(listSelector, data, bindings){
@@ -23,11 +30,18 @@ app.renderer = {
                 var dataIds = [];
 
                 var templatehtml = this.template;
+
                 var html = templatehtml;
+
+                var renderPerContext = this.renderPerContext;
 
                 $.each(data, function(i, element){
 
-                    var dataId = 'element-'+app.util.System.hash();
+                    if(renderPerContext){
+                        html = templatehtml(i, element);
+                    }
+
+                    var dataId = 'element-'+app.util.System.hash()+'-'+app.util.System.hash()+'-'+app.util.System.hash();
 
                     html = html.split('event(').join(' dataId="'+dataId+'" event(');
 
@@ -57,14 +71,16 @@ app.renderer = {
                 }
 
                 listSelector.html(html);
-                this.bind(listSelector, dataIds, bindings);
+                this.bind(listSelector, dataIds, bindings, data);
 
             },
 
-            bind: function(listSelector, dataIds, bindings){
+            bind: function(listSelector, dataIds, bindings, dataList){
 
                 var dataIdsLocal = dataIds;
 
+                listSelector.unbind();
+                
                 $.each(bindings, function(functionName, functionCallback){
 
                     listSelector.on('click', '[event="'+functionName+'"]', function(e){
@@ -75,9 +91,17 @@ app.renderer = {
 
                             if(dataId.dataId == arrtributeDataId){
                                 e.eCtx = dataId.context;
+
+                                var selector = $('*[dataId="' + dataId.dataId+'"]');
+                                selector.dataId = dataId.dataId;
+                                e.eCtxSelector = function(){
+                                    return selector;
+                                }
                             }
 
                         });
+
+                        e.eCtxList = dataList;
 
                         functionCallback(e);
 
