@@ -46,19 +46,13 @@ app.database = {
 
             } else if (app.config.dbMode == 'create') {
 
-                console.log('created '+localStorage.getItem('db_created'));
-                if (localStorage.getItem('db_created') == null || localStorage.getItem('db_created') == undefined || localStorage.getItem('db_created').length == 0) {
                    console.log('create db 222');
                     app.database.dbCreate(function () {
                         console.log('created db');
                         app.database.dbLoadData(function () {
                             app.system.mainRender(callBack);
-                            localStorage.setItem('db_created', true);
                         });
                     });
-                } else {
-                    app.system.mainRender(callBack);
-                }
 
             }
 
