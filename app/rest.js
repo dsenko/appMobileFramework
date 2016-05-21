@@ -32,7 +32,7 @@ app.rest = {
 
     getDelete: function (url, method, urlParams, successCallback, errorCallback, headers) {
 
-        app.rest.isMock(url, method, null, successCallback, function(){
+        app.rest.isMock(url, method, urlParams, successCallback, function(){
 
             var preparedUrl = null;
 
