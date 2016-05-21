@@ -8,9 +8,7 @@ app.renderer = {
             renderPerContext = false;
         }
 
-        if(typeof template == 'string'){
-            htmlTemplate = template;
-        }else if(renderPerContext == false){
+        if(renderPerContext == false){
             htmlTemplate = template();
         }else{
             htmlTemplate = template;
@@ -22,8 +20,59 @@ app.renderer = {
 
             renderPerContext: renderPerContext,
             template: htmlTemplate,
+            dataIds: null,
+            bindings: null,
+            listSelector: null,
+            data: null,
+
+            update: function(eCtx, compareField){
+
+                var _this = this;
+
+                $.each(this.dataIds, function(i, listObj){
+
+                    if(listObj.context[compareField] == eCtx[compareField]){
+
+                        _this.dataIds[i].context = eCtx;
+                        _this.data[i] = eCtx;
+
+                        var template = '';
+                        if(_this.renderPerContext){
+                            template = _this.template(i, eCtx);
+                        }else{
+                            template = _this.template();
+                        }
+
+                        var newListElementHtml = _this.renderElement(listObj.dataId, listObj.listElementId, template, listObj.context);
+
+                        for(var prop in _this.bindings){
+                            newListElementHtml = newListElementHtml.split('event('+prop+')').join('event="'+prop+'"');
+                        }
+
+                        $('*[liId="'+listObj.listElementId+'"]').replaceWith(newListElementHtml);
+
+                    }
+
+                });
+
+            },
+
+            renderElement: function(dataId, listElementId, html, element){
+
+                html = html.replace('>', ' liId="'+listElementId+'" >');
+                html = html.split('event(').join(' dataId="'+dataId+'" event(');
+
+                for(var prop in element){
+                    html = html.split('text('+prop+')').join(element[prop]);
+                }
+
+                return html;
+
+            },
 
             render: function(listSelector, data, bindings){
+
+                var _this = this;
 
                 var elementsHtml = [];
 
@@ -41,18 +90,16 @@ app.renderer = {
                         html = templatehtml(i, element);
                     }
 
+                    var listElementId = 'li-'+app.util.System.hash()+'-'+app.util.System.hash()+'-'+app.util.System.hash();
                     var dataId = 'element-'+app.util.System.hash()+'-'+app.util.System.hash()+'-'+app.util.System.hash();
 
-                    html = html.split('event(').join(' dataId="'+dataId+'" event(');
+                    html = _this.renderElement(dataId, listElementId, html, element);
 
                     dataIds.push({
+                        listElementId: listElementId,
                         dataId: dataId,
                         context: element
                     });
-
-                    for(var prop in element){
-                        html = html.split('text('+prop+')').join(element[prop]);
-                    }
 
                     elementsHtml.push(html);
 
@@ -71,6 +118,10 @@ app.renderer = {
                 }
 
                 listSelector.html(html);
+
+                this.bindings = bindings;
+                this.listSelector = listSelector;
+                this.data = data;
                 this.bind(listSelector, dataIds, bindings, data);
 
             },
@@ -80,7 +131,6 @@ app.renderer = {
                 var dataIdsLocal = dataIds;
 
                 listSelector.unbind();
-                
                 $.each(bindings, function(functionName, functionCallback){
 
                     listSelector.on('click', '[event="'+functionName+'"]', function(e){
@@ -109,32 +159,8 @@ app.renderer = {
 
                 });
 
+                this.dataIds = dataIdsLocal;
 
-                /*
-                for(var prop in bindings){
-
-                    var event = 'click'
-                    if(bindings[prop].eventType !== undefined){
-                        event = bindings[prop].eventType;
-                    }
-
-                   listSelector.on(event, '[event="'+prop+'"]', function(e){
-
-                       var arrtributeDataId = $(e.currentTarget).attr('dataId');
-
-                       $.each(dataIdsLocal, function(i, dataId){
-
-                           if(dataId.dataId == arrtributeDataId){
-                               e.eCtx = dataId.context;
-                           }
-
-                       });
-
-                       bindings[prop](e);
-
-                   });
-
-                }*/
 
             }
 
