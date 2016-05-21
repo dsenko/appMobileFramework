@@ -26,14 +26,8 @@ app.system = {
 
         $.each(nameList, function (i, name) {
 
-            console.log(name);
-
-            var selector = $('*[name="' + name+'"]');
-            selector.plainName = name;
-            selector.plainSelector = '*[name="' + name+'"]';
-
             selectors.names[name] = function(){
-                return selector;
+                return $('*[name="' + name+'"]');
             }
 
         });
