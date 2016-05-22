@@ -7,95 +7,96 @@ app.modal = {
 
         obj.data = {};
         obj.ready = false;
-        app.modal[name] = obj;
+        //obj = obj;
 
-        var tempTemplateId = '#temp-template-' +  app.util.System.hash();
-        $('body').append('<div id="' + tempTemplateId.replace('#', '') + '"></div>');
+      //  var tempTemplateId = '#temp-template-' +  app.util.System.hash();
+      //  $('body').append('<div id="' + tempTemplateId.replace('#', '') + '"></div>');
 
-        $(tempTemplateId).load(app.config.viewsPath+"/modal/" + obj.name + "/" + obj.name + ".view.html", function () {
+        var templateName = app.config.viewsPath+"/modal/" + obj.name + "/" + obj.name + ".view.html";
+        var templateHtml = templates[templateName];
 
-            var modalSelector = $('[mainmodal]');
-            var newModalId = 'modal-' +  app.util.System.hash();
-            modalSelector.attr('modalselector', newModalId);
+        var modalSelector = $('[mainmodal]');
+        var newModalId = 'modal-' +  app.util.System.hash();
+        modalSelector.attr('modalselector', newModalId);
 
-            app.modal[name].id = newModalId;
-            app.modal[name].selfSelector = function(){
-                return $('[modalselector="'+newModalId+'"]');
+        obj.id = newModalId;
+        obj.selfSelector = function(){
+            return $('[modalselector="'+newModalId+'"]');
+        }
+
+        obj.show = function () {
+
+            $('body').removeClass('modal-open');
+
+            var backgroundModalSelector = $('.modal-backdrop');
+
+            if(backgroundModalSelector && backgroundModalSelector.length > 1){
+                $(backgroundModalSelector[0]).fadeOut(200, function(){ $(this).remove();});
             }
 
-            obj.show = function () {
+            obj.selfSelector().modal('show');
 
-                $('body').removeClass('modal-open');
+            obj.selfSelector().on('hidden.bs.modal', function () {
 
-                var backgroundModalSelector = $('.modal-backdrop');
-
-                if(backgroundModalSelector && backgroundModalSelector.length > 1){
-                    $(backgroundModalSelector[0]).fadeOut(200, function(){ $(this).remove();});
-                }
-
-                app.modal[name].selfSelector().modal('show');
-
-                app.modal[name].selfSelector().on('hidden.bs.modal', function () {
-
-                    app.mCtx = null;
-
-                });
-
-            };
-
-            obj.hide = function (callBack) {
-
-                if(!app.modal[name].preventDismiss){
-                    app.modal[name].selfSelector().modal('hide');
-                }
-
-
-            };
-
-            obj.render = function (data) {
-
-                $('[modal="' + obj.name + '"]').html(obj.template);
-
-                if(obj.preventDismiss){
-                    obj.selfSelector().modal({
-                        backdrop: 'static',
-                        keyboard: false
-                    });
-
-                }else{
-                    obj.selfSelector().modal();
-                }
-
-
-                obj.init(data);
-                obj.show();
-
-            };
-
-            obj.forceHide = function(){
-
-                $('body').removeClass('modal-open');
-                $('.modal-backdrop').remove();
-                $('[modal="' + obj.name + '"]').html('');
                 app.mCtx = null;
 
+            });
+
+        };
+
+        obj.hide = function (callBack) {
+
+            if(!obj.preventDismiss){
+                obj.selfSelector().modal('hide');
             }
 
-            var templateHtml = $(tempTemplateId).html();
 
-            var selectorsObj =  app.system.createSelectors(templateHtml);
+        };
 
-            app.modal[name].selector = selectorsObj.selectors;
-            templateHtml = selectorsObj.html;
-            templateHtml = app.message.replace(templateHtml);
+        obj.render = function (data) {
 
-            app.modal[name].template = templateHtml;
 
-            $(tempTemplateId).remove();
+            $('[modal="' + obj.name + '"]').html(obj.template);
 
-            app.modal[name].ready = true;
+            if(obj.preventDismiss){
+                obj.selfSelector().modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
 
-        });
+            }else{
+                obj.selfSelector().modal();
+            }
+
+
+            obj.init(data);
+            obj.show();
+
+        };
+
+        obj.forceHide = function(){
+
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+            $('[modal="' + obj.name + '"]').html('');
+            app.mCtx = null;
+
+        }
+
+        var selectorsObj =  app.system.createSelectors(templateHtml);
+
+        obj.selector = selectorsObj.selectors;
+        templateHtml = selectorsObj.html;
+        templateHtml = app.message.replace(templateHtml);
+
+        obj.template = templateHtml;
+
+
+        obj.ready = true;
+
+        app.modal[name] = obj;
+
+
 
     },
 

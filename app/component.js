@@ -21,16 +21,33 @@ app.component = {
 
         app.component[name] = obj;
 
-        var tempTemplateId = '#temp-template-' + app.util.System.hash();
-        $('body').append('<div id="' + tempTemplateId.replace('#', '') + '"></div>');
+       // var tempTemplateId = '#temp-template-' + app.util.System.hash();
+       // $('body').append('<div id="' + tempTemplateId.replace('#', '') + '"></div>');
 
+        var templateName = app.config.viewsPath+"/component/" + obj.name + "/" + obj.name + ".view.html";
+        var templateHtml = templates[templateName];
+
+        var selectorsObj = app.system.createSelectors(templateHtml);
+        app.component[name].selector = selectorsObj.selectors;
+        templateHtml = selectorsObj.html;
+
+
+        app.component[name].template = templateHtml;
+        app.component[name].ready = true;
+        app.component.componentsReady++;
+
+        /*
         $(tempTemplateId).load(app.config.viewsPath+"/component/" + obj.name + "/" + obj.name + ".view.html", function () {
 
             var templateHtml = $(tempTemplateId).html();
 
+
             var selectorsObj = app.system.createSelectors(templateHtml);
             app.component[name].selector = selectorsObj.selectors;
             templateHtml = selectorsObj.html;
+
+            console.log('COMPONENT '+obj.name);
+            console.log(templateHtml);
 
             app.component[name].template = templateHtml;
             $(tempTemplateId).remove();
@@ -39,7 +56,7 @@ app.component = {
 
             app.component.componentsReady++;
 
-        });
+        });*/
 
     }
 

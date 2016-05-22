@@ -27,9 +27,44 @@ app.controller = {
         obj.ready = false;
         app.controller[name] = obj;
 
-        var tempTemplateId = '#temp-template-' + app.util.System.hash();
-        $('body').append('<div id="' + tempTemplateId.replace('#', '') + '"></div>');
+        //var tempTemplateId = '#temp-template-' + app.util.System.hash();
+        //$('body').append('<div id="' + tempTemplateId.replace('#', '') + '"></div>');
 
+        var templateName = app.config.viewsPath+"/controller/" + obj.name + "/" + obj.name + ".view.html";
+
+        var templateHtml = templates[templateName];
+
+        var selectorsObj = app.system.createSelectors(templateHtml);
+        app.controller[name].selector = selectorsObj.selectors;
+        templateHtml = selectorsObj.html;
+
+        if(app.controller[name].components instanceof Array){
+
+            $.each(app.controller[name].components, function(i, componentName){
+                var _component = app.component[componentName];
+
+                templateHtml = templateHtml.split('<component name="'+_component.name+'"></component>').join(_component.template);
+            });
+
+
+        }else{
+
+            $.each(app.controller[name].components, function(componentName, componentParams){
+                var _component = app.component[componentName];
+                templateHtml = templateHtml.split('<component name="'+_component.name+'"></component>').join(_component.template);
+            });
+
+
+        }
+
+
+        app.controller[name].plainTemplate = templateHtml;
+
+        templateHtml = app.message.replace(templateHtml);
+        app.controller[name].template = templateHtml;
+        app.controller[name].ready = true;
+
+        /*
         $(tempTemplateId).load(app.config.viewsPath+"/controller/" + obj.name + "/" + obj.name + ".view.html", function () {
 
             var templateHtml = $(tempTemplateId).html();
@@ -45,7 +80,11 @@ app.controller = {
                 $.each(app.controller[name].components, function(i, componentName){
                     var _component = app.component[componentName];
 
+                    console.log('before split');
+                    console.log(templateHtml);
                     templateHtml = templateHtml.split('<component name="'+_component.name+'"></component>').join(_component.template);
+                    console.log('after split');
+                    console.log(templateHtml);
                 });
 
 
@@ -53,8 +92,11 @@ app.controller = {
 
                 $.each(app.controller[name].components, function(componentName, componentParams){
                     var _component = app.component[componentName];
-
+                    console.log('before split');
+                    console.log(templateHtml);
                     templateHtml = templateHtml.split('<component name="'+_component.name+'"></component>').join(_component.template);
+                    console.log('after split');
+                    console.log(templateHtml);
                 });
 
 
@@ -69,7 +111,7 @@ app.controller = {
 
             app.controller[name].ready = true;
 
-        });
+        });*/
 
     },
 

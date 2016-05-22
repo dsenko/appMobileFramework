@@ -103,7 +103,7 @@ app.system = {
 
         app.system.hideModal();
 
-        app.system.waitUntilReady(_modal, function () {
+       // app.system.waitUntilReady(_modal, function () {
 
             if(_modal.checkNetwork == true){
                 app.cordova.checkNetwork();
@@ -122,7 +122,7 @@ app.system = {
             }
 
 
-        });
+       // });
     },
 
     render: function (_controller, data, callBack) {
@@ -133,11 +133,11 @@ app.system = {
             app.lastControllerName = app.ctx.fullName;
         }
 
-        app.system.waitUntilReady(_controller, function () {
+       // app.system.waitUntilReady(_controller, function () {
 
             app.ctx = $.extend(true, {}, app.controller[_controller.fullName]);
 
-            app.system.waitUntilComponentsReady(function () {
+           // app.system.waitUntilComponentsReady(function () {
 
                 app.system.hideModal();
 
@@ -178,10 +178,10 @@ app.system = {
 
 
 
-            });
+          //  });
 
 
-        });
+        //});
     },
 
     backPrevious: function(){

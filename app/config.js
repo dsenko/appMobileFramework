@@ -3,9 +3,9 @@ app.config = {
     mobileRun: false,
 
     debug: true,
-    
+
     mockApi: false,
-    
+
     mainController: "Home",
     viewsPath: 'view',
 
@@ -15,15 +15,15 @@ app.config = {
     dbTestMode: true,
 
     dbCreateDropFromScript: true,
-    
+
     dbCreateScript: 'sql/create.sql',
     dbDropScript: 'sql/drop.sql',
-    
+
     dbTestScript: 'sqltest.sql',
     dbProductionScript: 'sqlproduction.sql',
 
     dbName: 'localdb',
-    
+
     extend: function(configObj){
 
         for(var prop in configObj){
