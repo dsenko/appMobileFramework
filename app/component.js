@@ -27,11 +27,16 @@ app.component = {
         var templateName = app.config.viewsPath+"/component/" + obj.name + "/" + obj.name + ".view.html";
         var templateHtml = templates[templateName];
 
+        //$(tempTemplateId).html(templateHtml);
+
         var selectorsObj = app.system.createSelectors(templateHtml);
         app.component[name].selector = selectorsObj.selectors;
         templateHtml = selectorsObj.html;
 
 
+       // templateHtml = $(tempTemplateId).html();
+       // $(tempTemplateId).remove();
+        
         app.component[name].template = templateHtml;
         app.component[name].ready = true;
         app.component.componentsReady++;

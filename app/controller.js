@@ -27,12 +27,14 @@ app.controller = {
         obj.ready = false;
         app.controller[name] = obj;
 
-        //var tempTemplateId = '#temp-template-' + app.util.System.hash();
-        //$('body').append('<div id="' + tempTemplateId.replace('#', '') + '"></div>');
+
 
         var templateName = app.config.viewsPath+"/controller/" + obj.name + "/" + obj.name + ".view.html";
-
         var templateHtml = templates[templateName];
+
+      //  var tempTemplateId = '#temp-template-' + app.util.System.hash();
+       // $('body').append('<div id="' + tempTemplateId.replace('#', '') + '"></div>');
+       // $(tempTemplateId).html(templateHtml);
 
         var selectorsObj = app.system.createSelectors(templateHtml);
         app.controller[name].selector = selectorsObj.selectors;
@@ -57,6 +59,8 @@ app.controller = {
 
         }
 
+     //   templateHtml = $(tempTemplateId).html();
+      //  $(tempTemplateId).remove();
 
         app.controller[name].plainTemplate = templateHtml;
 

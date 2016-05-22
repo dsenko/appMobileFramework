@@ -15,6 +15,11 @@ app.modal = {
         var templateName = app.config.viewsPath+"/modal/" + obj.name + "/" + obj.name + ".view.html";
         var templateHtml = templates[templateName];
 
+        var tempTemplateId = '#temp-template-' +  app.util.System.hash();
+        $('body').append('<div id="' + tempTemplateId.replace('#', '') + '"></div>');
+
+        $(tempTemplateId).html(templateHtml);
+
         var modalSelector = $('[mainmodal]');
         var newModalId = 'modal-' +  app.util.System.hash();
         modalSelector.attr('modalselector', newModalId);
@@ -82,6 +87,9 @@ app.modal = {
             app.mCtx = null;
 
         }
+
+        templateHtml =  $(tempTemplateId).html();
+        $(tempTemplateId).remove();
 
         var selectorsObj =  app.system.createSelectors(templateHtml);
 
