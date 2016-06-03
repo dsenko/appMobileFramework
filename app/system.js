@@ -249,7 +249,14 @@ app.system = {
     },
 
     mainRender: function (callBack) {
+
+        if (app.events.onReady !== undefined) {
+            console.log('EVENT READY');
+            app.events.onReady();
+        }
+
         app.system.render(app.controller[app.config.mainController], null, callBack);
+
     },
 
 };

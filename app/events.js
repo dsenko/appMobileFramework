@@ -15,6 +15,10 @@ app.events = {
     onBack: function(){
 
     },
+    
+    onDeviceReady: function(){
+        
+    },
 
     extend: function(eventName, eventCallback){
 
@@ -36,6 +40,10 @@ app.events = {
 
         if(eventName == "back"){
             eventName = "onBack";
+        }
+        
+        if(eventName == 'ready'){
+            eventName = 'onReady'
         }
 
         app.events[eventName] = eventCallback;

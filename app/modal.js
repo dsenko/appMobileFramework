@@ -43,6 +43,10 @@ app.modal = {
 
             obj.selfSelector().on('hidden.bs.modal', function () {
 
+                if(app.mCtx.onHide){
+                    app.mCtx.onHide();
+                }
+
                 app.mCtx = null;
 
             });
