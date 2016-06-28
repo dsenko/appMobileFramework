@@ -125,7 +125,19 @@ app.system = {
        // });
     },
 
+    renderLastController: function(){
+        app.system.render(app.controller[app.lastControllerName]);
+    },
+
+    renderLastModal: function(){
+        app.system.renderModal(app.modal[app.lastModalName]);
+    },
+
     render: function (_controller, data, callBack) {
+
+      /*  if(app.util.System.isFunction(data)){
+            callBack = data;
+        }*/
 
         $(window).scrollTop(0);
 

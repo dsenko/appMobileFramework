@@ -5,6 +5,11 @@ app.util = {
 
     System: {
 
+        isFunction: function (functionToCheck) {
+            var getType = {};
+            return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+        },
+        
         parseJSON: function(s){
 
             s = s.replace(/\\n/g, "\\n")

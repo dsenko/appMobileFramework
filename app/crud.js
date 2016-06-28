@@ -5,6 +5,8 @@ app.crud = {
 
         sql = sql.split("'true'").join("'bool_true'");
         sql = sql.split("'false'").join("'bool_false'");
+        sql = sql.split(" true").join("'bool_true'");
+        sql = sql.split(" false").join("'bool_false'");
 
         return sql;
 
