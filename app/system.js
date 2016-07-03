@@ -95,7 +95,10 @@ app.system = {
 
     renderModal: function (_modal, data) {
 
-        $(window).scrollTop(0);
+        if(!_modal.preventScroll){
+            $(window).scrollTop(0);
+        }
+
 
         if(app.mCtx){
             app.lastModalName = _modal.fullName;
@@ -225,6 +228,7 @@ app.system = {
                         app.database.createDB(callBack);
                     };
                 }else{
+                    app.events.onDeviceReady();
                     app.database.createDB(callBack);
                 }
 
@@ -257,7 +261,14 @@ app.system = {
     },
 
     exit: function(){
-        navigator.app.exitApp();
+        if(app.config.mobileRun){
+            navigator.app.exitApp();
+        }else{
+            console.warn('EXIT APP');
+            app.system.hideModal();
+        }
+
+
     },
 
     mainRender: function (callBack) {

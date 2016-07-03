@@ -15,9 +15,13 @@ app.events = {
     onBack: function(){
 
     },
-    
+
     onDeviceReady: function(){
-        
+
+    },
+
+    onReady: function(){
+
     },
 
     extend: function(eventName, eventCallback){
@@ -25,7 +29,7 @@ app.events = {
         if(eventName == "render"){
             eventName = "onRender";
         }
-        
+
         if(eventName == "offline"){
             eventName = "onOffline";
         }
@@ -41,7 +45,7 @@ app.events = {
         if(eventName == "back"){
             eventName = "onBack";
         }
-        
+
         if(eventName == 'ready'){
             eventName = 'onReady'
         }
