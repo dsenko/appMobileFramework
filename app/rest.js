@@ -1,6 +1,9 @@
 app.rest = {
 
-    spinnerFunct: function(){
+    spinnerShow: function(){
+    },
+
+    spinnerHide: function(){
     },
 
     get: function (url, successCallback, errorCallback, urlParams, headers) {
@@ -46,10 +49,10 @@ app.rest = {
                 url: preparedUrl,
                 type: method,
                 beforeSend: function () {
-                    app.rest.spinnerFunct();
+                    app.rest.spinnerShow(url);
                 },
                 complete: function () {
-                    app.rest.spinnerFunct = function () {};
+                    app.rest.spinnerHide(url);
                 },
                 headers: headers,
                 contentType: "application/json; charset=utf-8",
@@ -82,7 +85,7 @@ app.rest = {
         app.rest.isMock(url, method, request, successCallback, function(){
 
             console.log(headers);
-            
+
             var preparedUrl = null;
 
             if(urlParams !== undefined && urlParams !== null){
@@ -97,10 +100,10 @@ app.rest = {
                 url: preparedUrl,
                 type: method,
                 beforeSend: function () {
-                    app.rest.spinnerFunct();
+                    app.rest.spinnerShow(url);
                 },
                 complete: function () {
-                    app.rest.spinnerFunct = function () {};
+                    app.rest.spinnerHide(url);
                 },
                 headers: headers,
                 contentType: "application/json; charset=utf-8",
