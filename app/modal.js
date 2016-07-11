@@ -43,11 +43,13 @@ app.modal = {
 
             obj.selfSelector().on('hidden.bs.modal', function () {
 
+                console.log('hide2');
                 if(app.mCtx.onHide){
                     app.mCtx.onHide();
                 }
 
-                app.mCtx = null;
+                obj.forceHide();
+
 
             });
 
@@ -56,7 +58,8 @@ app.modal = {
         obj.hide = function (callBack) {
 
             if(!obj.preventDismiss){
-                obj.selfSelector().modal('hide');
+                console.log('hide1');
+                obj.forceHide();
             }
 
 
@@ -84,6 +87,8 @@ app.modal = {
         };
 
         obj.forceHide = function(){
+
+            console.log('force hide');
 
             $('body').removeClass('modal-open');
             $('.modal-backdrop').remove();
