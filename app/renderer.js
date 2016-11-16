@@ -70,7 +70,7 @@ app.renderer = {
 
             },
 
-            render: function(listSelector, data, bindings){
+            render: function(listSelector, data, bindings, finishCallBack){
 
                 var _this = this;
 
@@ -124,6 +124,11 @@ app.renderer = {
                 this.data = data;
                 this.bind(listSelector, dataIds, bindings, data);
 
+				if(finishCallBack){
+					finishCallBack();
+				}
+				
+				
             },
 
             bind: function(listSelector, dataIds, bindings, dataList){
